@@ -2,7 +2,7 @@
 // BitCraft Market Search - script.js
 // ============================================
 
-const API_BASE = 'https://bitjita.com/api';
+const API_BASE = 'https://black-cell-9a6e.29kiyo.workers.dev/api';
 const HEADERS = { 'x-app-identifier': 'bitcraft-market-search-github-pages' };
 
 // BitCraft Map用のベースURL（座標→マップリンク）
