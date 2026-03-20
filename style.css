@@ -825,4 +825,15 @@ footer a:hover { color: var(--accent); }
   margin: 0 0 8px 0;
 }
 
+.price-chart-section {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
 
+.chart-wrap {
+  position: relative;
+  height: 200px;
+}
