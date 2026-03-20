@@ -15,7 +15,7 @@ const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 const suggestions = document.getElementById('suggestions');
 const tierFilter = document.getElementById('tierFilter');
-const categoryFilter = document.getElementById('categoryFilter');
+const rarityFilter = document.getElementById('rarityFilter');
 const orderTypeFilter = document.getElementById('orderTypeFilter');
 const resultSection = document.getElementById('resultSection');
 const emptyState = document.getElementById('emptyState');
@@ -124,6 +124,18 @@ async function doSearch() {
   try {
     const enQuery = translateQuery(q).toLowerCase();
     const tier = tierFilter.value;
+    const rarity = rarityFilter.value; // 追加
+
+let filtered = allItems.filter(item =>
+  item.name.toLowerCase().includes(enQuery)
+);
+
+if (tier) {
+  filtered = filtered.filter(item => String(item.tier) === String(tier));
+}
+if (rarity !== '') {  // 追加
+  filtered = filtered.filter(item => String(item.rarity) === String(rarity));
+}
 
     const allItems = await fetchAllMarketItems();
 
