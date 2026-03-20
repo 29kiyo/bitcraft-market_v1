@@ -173,38 +173,44 @@ function hideSuggestions() {
 // ============================================
 async function doSearch() {
   const q = searchInput.value.trim();
-  if (!q) return;
+  const tier = tierFilter.value;
+  const rarity = rarityFilter.value;
+
+  // 検索ワードもフィルターも何もない場合だけ早期リターン
+  if (!q && !tier && rarity === '') return;
+
   hideSuggestions();
   showLoading();
   clearError();
 
   try {
-    const hasJapanese = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
-    const tier = tierFilter.value;
-    const rarity = rarityFilter.value;
     const allItems = await fetchAllMarketItems();
+    const hasJapanese = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
 
-    let filtered = [];
+    let filtered = allItems;
 
-    if (hasJapanese) {
-      const matchedEn = new Set();
-      const sorted = Object.entries(ITEM_TRANSLATIONS).sort((a, b) => b[0].length - a[0].length);
-      for (const [ja, en] of sorted) {
-        if (ja.includes(q) || q.includes(ja)) matchedEn.add(en.toLowerCase());
+    // 検索ワードがある場合のみ名前フィルタリング
+    if (q) {
+      if (hasJapanese) {
+        const matchedEn = new Set();
+        const sorted = Object.entries(ITEM_TRANSLATIONS).sort((a, b) => b[0].length - a[0].length);
+        for (const [ja, en] of sorted) {
+          if (ja.includes(q) || q.includes(ja)) matchedEn.add(en.toLowerCase());
+        }
+        if (matchedEn.size > 0) {
+          filtered = filtered.filter(item => {
+            const name = item.name.toLowerCase();
+            for (const en of matchedEn) {
+              if (name.includes(en)) return true;
+            }
+            return false;
+          });
+        }
+      } else {
+        filtered = filtered.filter(item =>
+          item.name.toLowerCase().includes(q.toLowerCase())
+        );
       }
-      if (matchedEn.size > 0) {
-        filtered = allItems.filter(item => {
-          const name = item.name.toLowerCase();
-          for (const en of matchedEn) {
-            if (name.includes(en)) return true;
-          }
-          return false;
-        });
-      }
-    } else {
-      filtered = allItems.filter(item =>
-        item.name.toLowerCase().includes(q.toLowerCase())
-      );
     }
 
     if (tier) filtered = filtered.filter(item => String(item.tier) === String(tier));
@@ -217,16 +223,14 @@ async function doSearch() {
       return;
     }
 
-    // 1件だけならそのまま詳細表示
     if (currentItems.length === 1) {
       await loadItemDetail(currentItems[0]);
       return;
     }
 
-    // 複数件なら一覧表示
     currentPage = 1;
     renderSearchResults(currentItems, currentPage);
-    
+
   } catch (err) {
     showError(`エラーが発生しました: ${err.message}`);
     console.error(err);
@@ -234,7 +238,6 @@ async function doSearch() {
     hideLoading();
   }
 }
-
 function renderSearchResults(items, page = 1) {
   const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
   const start = (page - 1) * ITEMS_PER_PAGE;
