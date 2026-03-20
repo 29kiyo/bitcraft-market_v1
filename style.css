@@ -837,3 +837,44 @@ footer a:hover { color: var(--accent); }
   position: relative;
   height: 200px;
 }
+
+.region-stats-section {
+  margin-bottom: 16px;
+}
+
+.region-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.region-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.region-card.sell { border-left: 3px solid #00c896; }
+.region-card.sell-high { border-left: 3px solid #f0a500; }
+.region-card.buy { border-left: 3px solid #5b9cf6; }
+.region-card.count { border-left: 3px solid #c673e0; }
+
+.rc-label {
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.rc-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: #e0e0e0;
+}
+
+.rc-claim {
+  font-size: 11px;
+  color: #666;
+  margin-top: 4px;
+}
