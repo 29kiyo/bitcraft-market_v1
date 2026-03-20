@@ -34,6 +34,9 @@ backBtn.addEventListener('click', () => {
 // 状態
 let currentItems = [];
 let currentPage = 1;
+let currentOrderPage = 1;
+const ORDERS_PER_PAGE = 20;
+let currentOrderSort = 'asc';
 const ITEMS_PER_PAGE = 20;
 let currentOrders = [];
 let debounceTimer = null;
@@ -578,42 +581,91 @@ function renderSupplyDemand(orders) {
 }
 
 
-function renderOrders(orders, orderType) {
+function renderOrders(orders, orderType, page = 1, sort = 'asc') {
+  currentOrderPage = page;
+  currentOrderSort = sort;
+
   let filtered = orders;
   if (orderType === 'sell') filtered = orders.filter(o => o.orderType === 'sell');
   if (orderType === 'buy') filtered = orders.filter(o => o.orderType === 'buy');
-  filtered.sort((a, b) => Number(a.priceThreshold) - Number(b.priceThreshold));
+
+  if (sort === 'asc') {
+    filtered.sort((a, b) => Number(a.priceThreshold) - Number(b.priceThreshold));
+  } else {
+    filtered.sort((a, b) => Number(b.priceThreshold) - Number(a.priceThreshold));
+  }
+
+  const totalPages = Math.ceil(filtered.length / ORDERS_PER_PAGE);
+  const start = (page - 1) * ORDERS_PER_PAGE;
+  const pageOrders = filtered.slice(start, start + ORDERS_PER_PAGE);
+
+  const sellCount = orders.filter(o => o.orderType === 'sell').length;
+  const buyCount = orders.filter(o => o.orderType === 'buy').length;
+
+  const pagination = totalPages > 1 ? `
+    <div class="pagination">
+      <button class="page-btn" onclick="changeOrderPage(${page - 1})" ${page <= 1 ? 'disabled' : ''}>← 前へ</button>
+      <span class="page-info">${page} / ${totalPages}</span>
+      <button class="page-btn" onclick="changeOrderPage(${page + 1})" ${page >= totalPages ? 'disabled' : ''}>次へ →</button>
+    </div>
+  ` : '';
 
   const html = filtered.length === 0
     ? '<p class="no-orders">注文が見つかりませんでした</p>'
-  : `<table class="orders-table">
-    <thead><tr>
-      <th>種別</th>
-      <th>価格</th>
-      <th>数量</th>
-      <th>領地名</th>
-      <th>リージョン</th>
-      <th>座標</th>
-    </tr></thead>
-    <tbody>
-      ${filtered.map((o, i) => `
-        <tr class="order-row ${o.orderType}">
-          <td><span class="order-badge ${o.orderType}">${o.orderType === 'sell' ? '売り' : '買い'}</span></td>
-          <td class="price-cell">${formatPrice(o.priceThreshold)}</td>
-          <td>${formatNum(o.quantity)}</td>
-          <td class="claim-name">${o.claimName || '—'}</td>
-          <td>${o.regionName ? `${o.regionName} (R${o.regionId})` : '—'}</td>
-          <td class="coords">${formatCoords(o)}</td>
-        </tr>
-      `).join('')}
-    </tbody>
-  </table>`;
-  
+    : `
+      ${pagination}
+      <table class="orders-table">
+        <thead><tr>
+          <th>種別</th>
+          <th>
+            価格
+            <button class="sort-btn ${sort === 'asc' ? 'active' : ''}" onclick="changeOrderSort('asc')">↑</button>
+            <button class="sort-btn ${sort === 'desc' ? 'active' : ''}" onclick="changeOrderSort('desc')">↓</button>
+          </th>
+          <th>数量</th>
+          <th>領地名</th>
+          <th>リージョン</th>
+          <th>座標</th>
+        </tr></thead>
+        <tbody>
+          ${pageOrders.map((o, i) => `
+            <tr class="order-row ${o.orderType}">
+              <td><span class="order-badge ${o.orderType}">${o.orderType === 'sell' ? '売り' : '買い'}</span></td>
+              <td class="price-cell">${formatPrice(o.priceThreshold)}</td>
+              <td>${formatNum(o.quantity)}</td>
+              <td class="claim-name">${o.claimName || '—'}</td>
+              <td>${o.regionName ? `${o.regionName} (R${o.regionId})` : '—'}</td>
+              <td class="coords">${formatCoords(o)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+      ${pagination}
+    `;
+
   document.getElementById('ordersList').innerHTML = `
     <h3 class="section-title">📋 注文一覧 <span class="order-count">${filtered.length}件</span></h3>
+    <div class="order-type-tabs">
+      <button class="tab-btn ${orderType === '' ? 'active' : ''}" onclick="changeOrderType('')">売り＆買い (${orders.length})</button>
+      <button class="tab-btn ${orderType === 'sell' ? 'active' : ''}" onclick="changeOrderType('sell')">売り (${sellCount})</button>
+      <button class="tab-btn ${orderType === 'buy' ? 'active' : ''}" onclick="changeOrderType('buy')">買い (${buyCount})</button>
+    </div>
     ${html}
   `;
 }
+
+window.changeOrderPage = function(page) {
+  renderOrders(currentOrders, orderTypeFilter.value, page, currentOrderSort);
+};
+
+window.changeOrderSort = function(sort) {
+  renderOrders(currentOrders, orderTypeFilter.value, 1, sort);
+};
+
+window.changeOrderType = function(type) {
+  orderTypeFilter.value = type;
+  renderOrders(currentOrders, type, 1, currentOrderSort);
+};
 
 function renderMap(orders, orderType) {
   let filtered = orders;
