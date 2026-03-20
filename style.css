@@ -1040,3 +1040,14 @@ footer a:hover { color: var(--accent); }
   overflow-y: auto;
   max-height: 600px;
 }
+
+.region-order-filter {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #e0e0e0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-left: auto;
+}
