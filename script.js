@@ -24,6 +24,8 @@ const errorMsg = document.getElementById('errorMsg');
 const searchResults = document.getElementById('searchResults');
 const searchResultsList = document.getElementById('searchResultsList');
 const backBtn = document.getElementById('backBtn');
+const regionFilter = document.getElementById('regionFilter');
+regionFilter.addEventListener('change', applyFilters);
 
 backBtn.addEventListener('click', () => {
   resultSection.classList.add('hidden');
@@ -502,6 +504,67 @@ function renderSupplyDemand(orders) {
           <span>供給 ${supplyPct}%</span>
           <span>需要 ${demandPct}%</span>
         </div>
+      </div>
+    </div>
+  `;
+}
+
+function updateRegionFilter(orders) {
+  const regions = [...new Set(orders.map(o => o.regionName).filter(Boolean))].sort();
+  const current = regionFilter.value;
+  regionFilter.innerHTML = '<option value="">すべて</option>';
+  regions.forEach(r => {
+    const opt = document.createElement('option');
+    opt.value = r;
+    opt.textContent = r;
+    if (r === current) opt.selected = true;
+    regionFilter.appendChild(opt);
+  });
+}
+
+function renderRegionStats(orders) {
+  const region = regionFilter.value;
+  if (!region) {
+    document.getElementById('regionStats').innerHTML = '';
+    return;
+  }
+
+  const regionOrders = orders.filter(o => o.regionName === region);
+  const sells = regionOrders.filter(o => o.orderType === 'sell');
+  const buys = regionOrders.filter(o => o.orderType === 'buy');
+
+  const lowestSell = sells.length > 0
+    ? sells.reduce((min, o) => Number(o.priceThreshold) < Number(min.priceThreshold) ? o : min)
+    : null;
+  const highestBuy = buys.length > 0
+    ? buys.reduce((max, o) => Number(o.priceThreshold) > Number(max.priceThreshold) ? o : max)
+    : null;
+  const highestSell = sells.length > 0
+    ? sells.reduce((max, o) => Number(o.priceThreshold) > Number(max.priceThreshold) ? o : max)
+    : null;
+
+  document.getElementById('regionStats').innerHTML = `
+    <h3 class="section-title">🌍 ${region} (R${regionOrders[0]?.regionId || ''}) の市場</h3>
+    <div class="region-cards">
+      <div class="region-card sell">
+        <div class="rc-label">最安売値</div>
+        <div class="rc-val">${lowestSell ? formatPrice(lowestSell.priceThreshold) : '—'}</div>
+        <div class="rc-claim">${lowestSell?.claimName || ''}</div>
+      </div>
+      <div class="region-card sell-high">
+        <div class="rc-label">最高売値</div>
+        <div class="rc-val">${highestSell ? formatPrice(highestSell.priceThreshold) : '—'}</div>
+        <div class="rc-claim">${highestSell?.claimName || ''}</div>
+      </div>
+      <div class="region-card buy">
+        <div class="rc-label">最高買値</div>
+        <div class="rc-val">${highestBuy ? formatPrice(highestBuy.priceThreshold) : '—'}</div>
+        <div class="rc-claim">${highestBuy?.claimName || ''}</div>
+      </div>
+      <div class="region-card count">
+        <div class="rc-label">注文件数</div>
+        <div class="rc-val">${regionOrders.length}件</div>
+        <div class="rc-claim">売り${sells.length} / 買い${buys.length}</div>
       </div>
     </div>
   `;
