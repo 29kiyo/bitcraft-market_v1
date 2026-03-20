@@ -317,7 +317,6 @@ function applyFilters() {
     doSearch();
   }
   if (currentOrders.length > 0) {
-    renderRegionStats(currentOrders);
     renderOrders(currentOrders, orderTypeFilter.value);
   }
 }
@@ -330,8 +329,6 @@ function renderResult(item, priceData, orders, orderType) {
   renderPriceSummary(item, priceData);
   renderPriceChart(priceData);
   renderSupplyDemand(orders);
-  updateRegionFilter(orders);
-  renderRegionStats(orders);
   renderOrders(orders, orderType);
 
   resultSection.classList.remove('hidden');
@@ -530,13 +527,6 @@ function renderSupplyDemand(orders) {
     </div>
   `;
 }
-
-function renderRegionStats(orders) {
-  const region = regionFilter.value;
-  if (!region) {
-    document.getElementById('regionStats').innerHTML = '';
-    return;
-  }
 
   const regionOrders = orders.filter(o => o.regionName === region);
   const sells = regionOrders.filter(o => o.orderType === 'sell');
