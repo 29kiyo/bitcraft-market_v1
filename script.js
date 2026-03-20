@@ -21,6 +21,14 @@ const resultSection = document.getElementById('resultSection');
 const emptyState = document.getElementById('emptyState');
 const loading = document.getElementById('loading');
 const errorMsg = document.getElementById('errorMsg');
+const searchResults = document.getElementById('searchResults');
+const searchResultsList = document.getElementById('searchResultsList');
+const backBtn = document.getElementById('backBtn');
+
+backBtn.addEventListener('click', () => {
+  resultSection.classList.add('hidden');
+  searchResults.classList.remove('hidden');
+});
 
 // 状態
 let currentItems = [];
@@ -165,31 +173,52 @@ async function doSearch() {
   clearError();
 
   try {
-    const enQuery = translateQuery(q).toLowerCase();
+    const hasJapanese = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
     const tier = tierFilter.value;
     const rarity = rarityFilter.value;
-
     const allItems = await fetchAllMarketItems();
 
-    let filtered = allItems.filter(item =>
-      item.name.toLowerCase().includes(enQuery)
-    );
+    let filtered = [];
 
-    if (tier) {
-      filtered = filtered.filter(item => String(item.tier) === String(tier));
-    }
-    if (rarity !== '') {
-      filtered = filtered.filter(item => String(item.rarity) === String(rarity));
+    if (hasJapanese) {
+      const matchedEn = new Set();
+      const sorted = Object.entries(ITEM_TRANSLATIONS).sort((a, b) => b[0].length - a[0].length);
+      for (const [ja, en] of sorted) {
+        if (ja.includes(q) || q.includes(ja)) matchedEn.add(en.toLowerCase());
+      }
+      if (matchedEn.size > 0) {
+        filtered = allItems.filter(item => {
+          const name = item.name.toLowerCase();
+          for (const en of matchedEn) {
+            if (name.includes(en)) return true;
+          }
+          return false;
+        });
+      }
+    } else {
+      filtered = allItems.filter(item =>
+        item.name.toLowerCase().includes(q.toLowerCase())
+      );
     }
 
-    currentItems = filtered.slice(0, 50);
+    if (tier) filtered = filtered.filter(item => String(item.tier) === String(tier));
+    if (rarity !== '') filtered = filtered.filter(item => String(item.rarity) === String(rarity));
+
+    currentItems = filtered;
 
     if (currentItems.length === 0) {
       showError('アイテムが見つかりませんでした。別のキーワードで試してください。');
       return;
     }
 
-    await loadItemDetail(currentItems[0]);
+    // 1件だけならそのまま詳細表示
+    if (currentItems.length === 1) {
+      await loadItemDetail(currentItems[0]);
+      return;
+    }
+
+    // 複数件なら一覧表示
+    renderSearchResults(currentItems);
 
   } catch (err) {
     showError(`エラーが発生しました: ${err.message}`);
@@ -198,6 +227,43 @@ async function doSearch() {
     hideLoading();
   }
 }
+
+function renderSearchResults(items) {
+  searchResultsList.innerHTML = `
+    <h3 class="section-title">🔍 検索結果 <span class="order-count">${items.length}件</span></h3>
+    <div class="result-grid">
+      ${items.map(item => {
+        const iconUrl = `https://bitjita.com/${item.iconAssetName}.webp`;
+        const jaName = getJaName(item.name);
+        const useJaName = jaName && jaName.length > 2;
+        return `
+          <div class="result-card" onclick="selectItem('${item.id}')">
+            <img class="rc-icon" src="${iconUrl}" alt="${item.name}" onerror="this.style.display='none'">
+            <div class="rc-info">
+              <div class="rc-name">${useJaName ? jaName : item.name}</div>
+              ${useJaName ? `<div class="rc-sub">${item.name}</div>` : ''}
+            </div>
+            <div class="rc-badges">
+              ${item.tier && item.tier > 0 ? `<span class="badge tier">T${item.tier}</span>` : ''}
+              <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  searchResults.classList.remove('hidden');
+  resultSection.classList.add('hidden');
+  emptyState.classList.add('hidden');
+}
+
+window.selectItem = async function(itemId) {
+  const item = currentItems.find(i => i.id === itemId);
+  if (!item) return;
+  searchResults.classList.add('hidden');
+  await loadItemDetail(item);
+};
 // ============================================
 // アイテム詳細取得
 // ============================================
