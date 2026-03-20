@@ -457,7 +457,7 @@ function renderOrders(orders, orderType) {
           <td class="price-cell">${formatPrice(o.priceThreshold)}</td>
           <td>${formatNum(o.quantity)}</td>
           <td class="claim-name">${o.claimName || '—'}</td>
-          <td>${o.regionName || '—'}</td>
+          <td>${o.regionName ? `${o.regionName} (R${o.regionId})` : '—'}</td>
           <td class="coords">${formatCoords(o)}</td>
         </tr>
       `).join('')}
