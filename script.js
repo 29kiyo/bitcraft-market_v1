@@ -68,11 +68,14 @@ orderTypeFilter.addEventListener('change', applyFilters);
 // 検索オートサジェスト
 // ============================================
 async function onSearchInput() {
-  console.log('onSearchInput called:', searchInput.value);
   const q = searchInput.value.trim();
   if (q.length < 2) { hideSuggestions(); return; }
   clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => fetchSuggestions(q), 500);
+  debounceTimer = setTimeout(() => {
+    // タイムアウト時に最新の値を取得
+    const latestQ = searchInput.value.trim();
+    fetchSuggestions(latestQ);
+  }, 500);
 }
 
 async function fetchSuggestions(q) {
