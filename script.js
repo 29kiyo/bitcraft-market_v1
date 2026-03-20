@@ -112,7 +112,7 @@ async function doSearch() {
     if (!res.ok) throw new Error(`API Error: ${res.status}`);
     const data = await res.json();
 
-    currentItems = data.items || [];
+    currentItems = data?.data?.items || [];
 
     if (currentItems.length === 0) {
       showError('アイテムが見つかりませんでした。別のキーワードで試してください。');
@@ -138,35 +138,32 @@ async function loadItemDetail(item) {
   showLoading();
   try {
     const orderType = orderTypeFilter.value;
+    const itemOrCargo = item.itemType === 1 ? 'cargo' : 'item';
 
-    // 並行して価格履歴と注文を取得
-    const [priceRes, ordersRes] = await Promise.all([
-      fetch(`${API_BASE}/market/items/${item.id}/price-history?bucket=1+day&limit=7`, { headers: HEADERS }),
-      fetch(`${API_BASE}/market?itemId=${item.id}&hasOrders=true&limit=100`, { headers: HEADERS })
+    const [marketRes, priceRes] = await Promise.all([
+      fetch(`${API_BASE}/market/${itemOrCargo}/${item.id}`, { headers: HEADERS }),
+      fetch(`${API_BASE}/market/${itemOrCargo}/${item.id}/price-history?bucket=1+day&limit=7`, { headers: HEADERS })
     ]);
 
+    const marketData = marketRes.ok ? await marketRes.json() : null;
     const priceData = priceRes.ok ? await priceRes.json() : null;
-    const ordersData = ordersRes.ok ? await ordersRes.json() : null;
 
     currentOrders = [];
 
-    // 注文データ処理
-    if (ordersData) {
-      // sell/buy orders抽出
-      const allOrders = [];
-      if (ordersData.sellOrders) allOrders.push(...ordersData.sellOrders.map(o => ({ ...o, orderType: 'sell' })));
-      if (ordersData.buyOrders) allOrders.push(...ordersData.buyOrders.map(o => ({ ...o, orderType: 'buy' })));
-      // items配列内のorders
-      if (ordersData.items) {
-        ordersData.items.forEach(it => {
-          if (it.sellOrders) allOrders.push(...it.sellOrders.map(o => ({ ...o, orderType: 'sell' })));
-          if (it.buyOrders) allOrders.push(...it.buyOrders.map(o => ({ ...o, orderType: 'buy' })));
-        });
-      }
-      currentOrders = allOrders;
+    if (marketData) {
+      const sells = (marketData.sellOrders || []).map(o => ({ ...o, orderType: 'sell' }));
+      const buys = (marketData.buyOrders || []).map(o => ({ ...o, orderType: 'buy' }));
+      currentOrders = [...sells, ...buys];
     }
 
-    renderResult(item, priceData, currentOrders, orderType);
+    // statsをitemにマージ
+    const enrichedItem = {
+      ...item,
+      lowestSellPrice: marketData?.stats?.lowestSell,
+      highestBuyPrice: marketData?.stats?.highestBuy,
+    };
+
+    renderResult(enrichedItem, priceData, currentOrders, orderType);
   } catch (err) {
     showError(`詳細取得エラー: ${err.message}`);
     console.error(err);
