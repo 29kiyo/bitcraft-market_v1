@@ -315,11 +315,9 @@ function translateQuery(query) {
 
 function getJaName(enName) {
   if (!enName) return null;
-  // 完全一致
+  // 完全一致のみ返す（部分一致は使わない）
   if (ITEM_TRANSLATIONS_EN_JA[enName]) return ITEM_TRANSLATIONS_EN_JA[enName];
-  // 部分一致（英語名の一部がキーに含まれる場合）
-  for (const [en, ja] of Object.entries(ITEM_TRANSLATIONS_EN_JA)) {
-    if (enName.includes(en)) return ja;
-  }
+  return null;
+}
   return null;
 }
