@@ -389,6 +389,81 @@ function renderPriceSummary(item, priceData) {
   `;
 }
 
+function renderPriceChart(priceData) {
+  const data = priceData?.priceData || [];
+  if (data.length === 0) {
+    document.getElementById('priceChart').innerHTML = '';
+    return;
+  }
+
+  const sorted = [...data].reverse();
+  const labels = sorted.map(d => {
+    const date = new Date(d.bucket);
+    return `${date.getMonth()+1}/${date.getDate()}`;
+  });
+  const prices = sorted.map(d => Math.round(d.avgPrice));
+  const volumes = sorted.map(d => d.volume);
+
+  document.getElementById('priceChart').innerHTML = `
+    <h3 class="section-title">📈 価格推移（7日）</h3>
+    <div class="chart-wrap">
+      <canvas id="priceCanvas"></canvas>
+    </div>
+    <h3 class="section-title" style="margin-top:24px">📦 取引量（7日）</h3>
+    <div class="chart-wrap">
+      <canvas id="volumeCanvas"></canvas>
+    </div>
+  `;
+
+  // 価格グラフ
+  new Chart(document.getElementById('priceCanvas'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: '平均価格',
+        data: prices,
+        borderColor: '#00c896',
+        backgroundColor: 'rgba(0,200,150,0.1)',
+        tension: 0.3,
+        fill: true,
+        pointBackgroundColor: '#00c896',
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#aaa' } } },
+      scales: {
+        x: { ticks: { color: '#aaa' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        y: { ticks: { color: '#aaa' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+      }
+    }
+  });
+
+  // 取引量グラフ
+  new Chart(document.getElementById('volumeCanvas'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: '取引量',
+        data: volumes,
+        backgroundColor: 'rgba(91,156,246,0.5)',
+        borderColor: '#5b9cf6',
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#aaa' } } },
+      scales: {
+        x: { ticks: { color: '#aaa' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        y: { ticks: { color: '#aaa' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+      }
+    }
+  });
+}
+
 function renderSupplyDemand(orders) {
   const sellOrders = orders.filter(o => o.orderType === 'sell');
   const buyOrders = orders.filter(o => o.orderType === 'buy');
