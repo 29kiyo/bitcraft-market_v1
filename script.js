@@ -531,19 +531,6 @@ function renderSupplyDemand(orders) {
   `;
 }
 
-function updateRegionFilter(orders) {
-  const regions = [...new Set(orders.map(o => o.regionName).filter(Boolean))].sort();
-  const current = regionFilter.value;
-  regionFilter.innerHTML = '<option value="">すべて</option>';
-  regions.forEach(r => {
-    const opt = document.createElement('option');
-    opt.value = r;
-    opt.textContent = r;
-    if (r === current) opt.selected = true;
-    regionFilter.appendChild(opt);
-  });
-}
-
 function renderRegionStats(orders) {
   const region = regionFilter.value;
   if (!region) {
