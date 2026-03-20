@@ -31,9 +31,6 @@ let currentItems = [];
 let currentOrders = [];
 let debounceTimer = null;
 
-// 全件キャッシュ
-let cachedMarketItems = null;
-
 let cachedMarketItems = null;
 let isFetching = false;
 let fetchPromise = null;
