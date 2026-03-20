@@ -67,24 +67,6 @@ orderTypeFilter.addEventListener('change', applyFilters);
 // ============================================
 // 検索オートサジェスト
 // ============================================
-let isComposing = false;
-searchInput.addEventListener('compositionstart', () => { isComposing = true; });
-searchInput.addEventListener('compositionend', () => {
-  isComposing = false;
-  const q = searchInput.value.trim();
-  if (q.length < 2) { hideSuggestions(); return; }
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => fetchSuggestions(q), 300);
-});
-
-async function onSearchInput() {
-  if (isComposing) return;
-  const q = searchInput.value.trim();
-  if (q.length < 2) { hideSuggestions(); return; }
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => fetchSuggestions(q), 300);
-}
-
 async function onSearchInput() {
   const q = searchInput.value.trim();
   if (q.length < 2) { hideSuggestions(); return; }
