@@ -83,7 +83,10 @@ async function fetchSuggestions(q) {
       .slice(0, 8);
     if (filtered.length === 0) { hideSuggestions(); return; }
     showSuggestions(filtered);
-  } catch { hideSuggestions(); }
+  } catch(err) { 
+    console.error('fetchSuggestions error:', err);
+    hideSuggestions(); 
+  }
 }
 
 function showSuggestions(items) {
