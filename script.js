@@ -318,7 +318,15 @@ function applyFilters() {
 // ============================================
 // 描画
 // ============================================
+function renderResult(item, priceData, orders, orderType) {
+  renderItemHeader(item);
+  renderPriceSummary(item, priceData);
+  renderSupplyDemand(orders);
+  renderOrders(orders, orderType);
 
+  resultSection.classList.remove('hidden');
+  emptyState.classList.add('hidden');
+}
 function renderItemHeader(item) {
   const jaName = getJaName(item.name);
   document.getElementById('itemHeader').innerHTML = `
