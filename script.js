@@ -240,6 +240,14 @@ function renderSearchResults(items, page = 1) {
 
   searchResultsList.innerHTML = `
     <h3 class="section-title">🔍 検索結果 <span class="order-count">${items.length}件</span></h3>
+    ${totalPages > 1 ? `
+  <div class="pagination">
+    <button class="page-btn" onclick="changePage(${page - 1})" ${page <= 1 ? 'disabled' : ''}>← 前へ</button>
+    <span class="page-info">${page} / ${totalPages}</span>
+    <button class="page-btn" onclick="changePage(${page + 1})" ${page >= totalPages ? 'disabled' : ''}>次へ →</button>
+  </div>
+` : ''}
+<div class="result-grid">
     <div class="result-grid">
       ${pageItems.map(item => {
         const iconUrl = `https://bitjita.com/${item.iconAssetName}.webp`;
