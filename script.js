@@ -295,7 +295,11 @@ async function loadItemDetail(item) {
       ...item,
       lowestSellPrice: marketData?.stats?.lowestSell,
       highestBuyPrice: marketData?.stats?.highestBuy,
+      itemOrCargo,
     };
+
+    // 現在のアイテムを保存（期間切り替え用）
+    window._currentItem = enrichedItem;
 
     renderResult(enrichedItem, priceData, currentOrders, orderType);
   } catch (err) {
@@ -398,45 +402,33 @@ function renderPriceSummary(item, priceData) {
   `;
 }
 
-function renderPriceChart(priceData) {
+function renderPriceChart(priceData, period = '7d') {
   const data = priceData?.priceData || [];
-  const recentTrades = priceData?.recentTrades || [];
 
-  if (data.length === 0) {
-    document.getElementById('priceChart').innerHTML = '';
-    return;
-  }
+  document.getElementById('priceChart').innerHTML = `
+    <h3 class="section-title">📈 価格推移・取引量</h3>
+    <div class="period-btns">
+      <button class="period-btn ${period === '24h' ? 'active' : ''}" onclick="changePeriod('24h')">24H</button>
+      <button class="period-btn ${period === '7d' ? 'active' : ''}" onclick="changePeriod('7d')">7D</button>
+      <button class="period-btn ${period === '30d' ? 'active' : ''}" onclick="changePeriod('30d')">30D</button>
+    </div>
+    ${data.length === 0 ? '<p class="no-orders">データがありません</p>' : `
+      <div class="chart-wrap"><canvas id="priceCanvas"></canvas></div>
+      <div class="chart-wrap" style="margin-top:16px"><canvas id="volumeCanvas"></canvas></div>
+    `}
+  `;
+
+  if (data.length === 0) return;
 
   const sorted = [...data].reverse();
   const labels = sorted.map(d => {
     const date = new Date(d.bucket);
+    if (period === '24h') return `${date.getHours()}:00`;
     return `${date.getMonth()+1}/${date.getDate()}`;
   });
   const prices = sorted.map(d => Math.round(d.avgPrice));
   const volumes = sorted.map(d => d.volume);
 
-  document.getElementById('priceChart').innerHTML = `
-    <h3 class="section-title">📈 価格推移・取引量（7日）</h3>
-    <div class="chart-row">
-      <div class="chart-col">
-        <div class="chart-label">全体</div>
-        <div class="chart-wrap"><canvas id="priceCanvas"></canvas></div>
-        <div class="chart-wrap"><canvas id="volumeCanvas"></canvas></div>
-      </div>
-      <div class="chart-col">
-        <div class="chart-label">
-          リージョン別
-          <select id="regionChartFilter" class="region-chart-select">
-            <option value="">リージョンを選択</option>
-          </select>
-        </div>
-        <div class="chart-wrap"><canvas id="regionPriceCanvas"></canvas></div>
-        <div class="chart-wrap"><canvas id="regionVolumeCanvas"></canvas></div>
-      </div>
-    </div>
-  `;
-
-  // 全体グラフ
   new Chart(document.getElementById('priceCanvas'), {
     type: 'line',
     data: {
@@ -482,92 +474,22 @@ function renderPriceChart(priceData) {
       }
     }
   });
-
-  // リージョン選択肢を設定
-  const regions = [...new Set(recentTrades.map(t => t.regionName).filter(Boolean))].sort();
-  const regionSelect = document.getElementById('regionChartFilter');
-  regions.forEach(r => {
-    const trades = recentTrades.filter(t => t.regionName === r);
-    const regionId = trades[0]?.regionId || '';
-    const opt = document.createElement('option');
-    opt.value = r;
-    opt.textContent = `${r} (R${regionId})`;
-    regionSelect.appendChild(opt);
-  });
-
-  let regionPriceChart = null;
-  let regionVolumeChart = null;
-
-  regionSelect.addEventListener('change', () => {
-    const selected = regionSelect.value;
-    if (!selected) return;
-
-    const regionTrades = recentTrades.filter(t => t.regionName === selected);
-
-    // 日別に集計
-    const byDay = {};
-    regionTrades.forEach(t => {
-      const date = new Date(t.timestamp);
-      const key = `${date.getMonth()+1}/${date.getDate()}`;
-      if (!byDay[key]) byDay[key] = { prices: [], volume: 0 };
-      byDay[key].prices.push(t.unitPrice);
-      byDay[key].volume += t.quantity;
-    });
-
-    const rLabels = Object.keys(byDay).reverse();
-    const rPrices = rLabels.map(k => Math.round(byDay[k].prices.reduce((a,b)=>a+b,0) / byDay[k].prices.length));
-    const rVolumes = rLabels.map(k => byDay[k].volume);
-
-    if (regionPriceChart) regionPriceChart.destroy();
-    if (regionVolumeChart) regionVolumeChart.destroy();
-
-    regionPriceChart = new Chart(document.getElementById('regionPriceCanvas'), {
-      type: 'line',
-      data: {
-        labels: rLabels,
-        datasets: [{
-          label: `${selected} 平均価格`,
-          data: rPrices,
-          borderColor: '#f0a500',
-          backgroundColor: 'rgba(240,165,0,0.1)',
-          tension: 0.3,
-          fill: true,
-          pointBackgroundColor: '#f0a500',
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { labels: { color: '#aaa' } } },
-        scales: {
-          x: { ticks: { color: '#aaa' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-          y: { ticks: { color: '#aaa' }, grid: { color: 'rgba(255,255,255,0.05)' } }
-        }
-      }
-    });
-
-    regionVolumeChart = new Chart(document.getElementById('regionVolumeCanvas'), {
-      type: 'bar',
-      data: {
-        labels: rLabels,
-        datasets: [{
-          label: `${selected} 取引量`,
-          data: rVolumes,
-          backgroundColor: 'rgba(240,165,0,0.3)',
-          borderColor: '#f0a500',
-          borderWidth: 1,
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { labels: { color: '#aaa' } } },
-        scales: {
-          x: { ticks: { color: '#aaa' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-          y: { ticks: { color: '#aaa' }, grid: { color: 'rgba(255,255,255,0.05)' } }
-        }
-      }
-    });
-  });
 }
+
+window.changePeriod = async function(period) {
+  const item = window._currentItem;
+  if (!item) return;
+
+  const bucketMap = { '24h': '1+hour', '7d': '1+day', '30d': '1+day' };
+  const limitMap = { '24h': 24, '7d': 7, '30d': 30 };
+
+  const res = await fetch(
+    `${API_BASE}/market/${item.itemOrCargo}/${item.id}/price-history?bucket=${bucketMap[period]}&limit=${limitMap[period]}`,
+    { headers: HEADERS }
+  );
+  const priceData = res.ok ? await res.json() : null;
+  renderPriceChart(priceData, period);
+};
 function renderSupplyDemand(orders) {
   const sellOrders = orders.filter(o => o.orderType === 'sell');
   const buyOrders = orders.filter(o => o.orderType === 'buy');
