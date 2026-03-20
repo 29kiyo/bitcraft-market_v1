@@ -92,10 +92,16 @@ function showSuggestions(items) {
     const div = document.createElement('div');
     div.className = 'suggestion-item';
     const jaName = getJaName(item.name);
+    const iconUrl = `https://bitjita.com/${item.iconAssetName}.webp`;
+
     div.innerHTML = `
-      <span class="s-name">${item.name}</span>
-      ${jaName ? `<span class="s-ja">${jaName}</span>` : ''}
-      ${item.tier ? `<span class="s-tier">T${item.tier}</span>` : ''}
+      <img class="s-icon" src="${iconUrl}" alt="${item.name}" onerror="this.style.display='none'">
+      <div class="s-text">
+        <span class="s-name">${jaName ? jaName : item.name}</span>
+        <span class="s-sub">${jaName ? item.name : ''}</span>
+      </div>
+      ${item.tier && item.tier > 0 ? `<span class="s-tier">T${item.tier}</span>` : ''}
+      <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
     `;
     div.addEventListener('click', () => {
       searchInput.value = item.name;
@@ -105,10 +111,6 @@ function showSuggestions(items) {
     suggestions.appendChild(div);
   });
   suggestions.classList.remove('hidden');
-}
-
-function hideSuggestions() {
-  suggestions.classList.add('hidden');
 }
 
 // ============================================
