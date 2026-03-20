@@ -615,7 +615,7 @@ function formatNum(val) {
 
 function formatCoords(order) {
   if (order.claimLocationX == null) return '—';
-  return `X:${Math.round(order.claimLocationX)}, Z:${Math.round(order.claimLocationZ)}`;
+  return `N:${Math.round(order.claimLocationZ)}, E:${Math.round(order.claimLocationX)}`;
 }
 
 function showLoading() {
