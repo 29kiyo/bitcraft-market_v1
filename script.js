@@ -37,6 +37,25 @@ let currentPage = 1;
 let currentOrderPage = 1;
 const ORDERS_PER_PAGE = 20;
 let currentOrderSort = 'asc';
+let currentOrderRegion = '';
+
+window.changeOrderRegion = function(region) {
+  currentOrderRegion = region;
+  renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, region);
+};
+
+window.changeOrderType = function(type) {
+  orderTypeFilter.value = type;
+  renderOrders(currentOrders, type, 1, currentOrderSort, currentOrderRegion);
+};
+
+window.changeOrderPage = function(page) {
+  renderOrders(currentOrders, orderTypeFilter.value, page, currentOrderSort, currentOrderRegion);
+};
+
+window.changeOrderSort = function(sort) {
+  renderOrders(currentOrders, orderTypeFilter.value, 1, sort, currentOrderRegion);
+};
 const ITEMS_PER_PAGE = 20;
 let currentOrders = [];
 let debounceTimer = null;
@@ -581,13 +600,14 @@ function renderSupplyDemand(orders) {
 }
 
 
-function renderOrders(orders, orderType, page = 1, sort = 'asc') {
+function renderOrders(orders, orderType, page = 1, sort = 'asc', regionFilter = '') {
   currentOrderPage = page;
   currentOrderSort = sort;
 
   let filtered = orders;
   if (orderType === 'sell') filtered = orders.filter(o => o.orderType === 'sell');
   if (orderType === 'buy') filtered = orders.filter(o => o.orderType === 'buy');
+  if (regionFilter) filtered = filtered.filter(o => o.regionName === regionFilter);
 
   if (sort === 'asc') {
     filtered.sort((a, b) => Number(a.priceThreshold) - Number(b.priceThreshold));
@@ -600,6 +620,12 @@ function renderOrders(orders, orderType, page = 1, sort = 'asc') {
   const pageOrders = filtered.slice(start, start + ORDERS_PER_PAGE);
 
   const sellCount = orders.filter(o => o.orderType === 'sell').length;
+const regions = [...new Set(orders.map(o => o.regionName).filter(Boolean))].sort();
+const regionOptions = regions.map(r => {
+  const rid = orders.find(o => o.regionName === r)?.regionId || '';
+  return `<option value="${r}" ${regionFilter === r ? 'selected' : ''}>${r} (R${rid})</option>`;
+}).join('');
+  
   const buyCount = orders.filter(o => o.orderType === 'buy').length;
 
   const pagination = totalPages > 1 ? `
@@ -649,6 +675,10 @@ function renderOrders(orders, orderType, page = 1, sort = 'asc') {
       <button class="tab-btn ${orderType === '' ? 'active' : ''}" onclick="changeOrderType('')">売り＆買い (${orders.length})</button>
       <button class="tab-btn ${orderType === 'sell' ? 'active' : ''}" onclick="changeOrderType('sell')">売り (${sellCount})</button>
       <button class="tab-btn ${orderType === 'buy' ? 'active' : ''}" onclick="changeOrderType('buy')">買い (${buyCount})</button>
+      <select class="region-order-filter" onchange="changeOrderRegion(this.value)">
+    <option value="">全リージョン</option>
+    ${regionOptions}
+  </select>
     </div>
     ${html}
   `;
