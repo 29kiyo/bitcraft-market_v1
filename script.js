@@ -24,8 +24,7 @@ const errorMsg = document.getElementById('errorMsg');
 const searchResults = document.getElementById('searchResults');
 const searchResultsList = document.getElementById('searchResultsList');
 const backBtn = document.getElementById('backBtn');
-const regionFilter = document.getElementById('regionFilter');
-regionFilter.addEventListener('change', applyFilters);
+
 
 backBtn.addEventListener('click', () => {
   resultSection.classList.add('hidden');
