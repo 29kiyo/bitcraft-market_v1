@@ -348,11 +348,12 @@ async function loadItemDetail(item) {
 // フィルター適用
 // ============================================
 function applyFilters() {
-  if (searchInput.value.trim()) {
+  const tier = tierFilter.value;
+  const rarity = rarityFilter.value;
+  const q = searchInput.value.trim();
+
+  if (q || tier || rarity !== '') {
     doSearch();
-  }
-  if (currentOrders.length > 0) {
-    renderOrders(currentOrders, orderTypeFilter.value);
   }
 }
 
