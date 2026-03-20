@@ -362,7 +362,7 @@ function renderMap(orders, orderType) {
   if (orderType === 'sell') filtered = orders.filter(o => o.orderType === 'sell');
   if (orderType === 'buy') filtered = orders.filter(o => o.orderType === 'buy');
 
-  const withCoords = filtered.filter(o => o.locationX != null && o.locationZ != null);
+  const withCoords = filtered.filter(o => o.claimLocationX != null && o.claimLocationZ != null);
 
   const mapContainer = document.getElementById('mapContainer');
 
@@ -372,8 +372,8 @@ function renderMap(orders, orderType) {
   }
 
   // SVGベースの簡易マップ（座標をキャンバスにマッピング）
-  const xs = withCoords.map(o => Number(o.locationX));
-  const zs = withCoords.map(o => Number(o.locationZ));
+  const xs = withCoords.map(o => Number(o.claimLocationX));
+  const zs = withCoords.map(o => Number(o.claimLocationZ));
   const minX = Math.min(...xs), maxX = Math.max(...xs);
   const minZ = Math.min(...zs), maxZ = Math.max(...zs);
   const padX = (maxX - minX) * 0.15 || 500;
@@ -392,7 +392,7 @@ function renderMap(orders, orderType) {
   const claimMap = {};
   withCoords.forEach((o, i) => {
     const key = o.claimName || `${o.locationX},${o.locationZ}`;
-    if (!claimMap[key]) claimMap[key] = { orders: [], x: Number(o.locationX), z: Number(o.locationZ) };
+    if (!claimMap[key]) claimMap[key] = { orders: [], x: Number(o.claimLocationX), z: Number(o.claimLocationZ) };
     claimMap[key].orders.push({ ...o, globalIdx: i });
   });
 
@@ -501,8 +501,8 @@ function formatNum(val) {
 }
 
 function formatCoords(order) {
-  if (order.locationX == null) return '—';
-  return `X:${Math.round(order.locationX)}, Z:${Math.round(order.locationZ)}`;
+  if (order.claimLocationX == null) return '—';
+  return `X:${Math.round(order.claimLocationX)}, Z:${Math.round(order.claimLocationZ)}`;
 }
 
 function showLoading() {
