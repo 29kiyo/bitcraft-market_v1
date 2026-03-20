@@ -57,6 +57,7 @@ searchInput.addEventListener('keydown', e => {
   if (e.key === 'Enter') doSearch();
 });
 searchInput.addEventListener('input', onSearchInput);
+searchInput.addEventListener('compositionend', onSearchInput);
 document.addEventListener('click', e => {
   if (!e.target.closest('.search-box')) hideSuggestions();
 });
@@ -71,7 +72,7 @@ async function onSearchInput() {
   const q = searchInput.value.trim();
   if (q.length < 2) { hideSuggestions(); return; }
   clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => fetchSuggestions(q), 300);
+  debounceTimer = setTimeout(() => fetchSuggestions(q), 500);
 }
 
 async function fetchSuggestions(q) {
