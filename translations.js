@@ -319,6 +319,3 @@ function getJaName(enName) {
   if (ITEM_TRANSLATIONS_EN_JA[enName]) return ITEM_TRANSLATIONS_EN_JA[enName];
   return null;
 }
-
- return null;
-}
