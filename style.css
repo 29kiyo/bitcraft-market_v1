@@ -908,3 +908,31 @@ footer a:hover { color: var(--accent); }
   font-size: 12px;
   cursor: pointer;
 }
+
+.period-btns {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.period-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #aaa;
+  padding: 4px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.period-btn:hover {
+  border-color: #00c896;
+  color: #00c896;
+}
+
+.period-btn.active {
+  background: rgba(0,200,150,0.15);
+  border-color: #00c896;
+  color: #00c896;
+}
