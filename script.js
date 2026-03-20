@@ -441,7 +441,7 @@ function renderOrders(orders, orderType) {
 
   const html = filtered.length === 0
     ? '<p class="no-orders">注文が見つかりませんでした</p>'
-   : `<table class="orders-table">
+  : `<table class="orders-table">
     <thead><tr>
       <th>種別</th>
       <th>価格</th>
@@ -449,25 +449,18 @@ function renderOrders(orders, orderType) {
       <th>領地名</th>
       <th>リージョン</th>
       <th>座標</th>
-      <th>マップ</th>
     </tr></thead>
     <tbody>
-      ${filtered.map((o, i) => {
-        const mapUrl = o.claimLocationX != null
-          ? `https://map.bitjita.com/?x=${Math.round(o.claimLocationX)}&y=${Math.round(o.claimLocationZ)}&zoom=6`
-          : null;
-        return `
-          <tr class="order-row ${o.orderType}">
-            <td><span class="order-badge ${o.orderType}">${o.orderType === 'sell' ? '売り' : '買い'}</span></td>
-            <td class="price-cell">${formatPrice(o.priceThreshold)}</td>
-            <td>${formatNum(o.quantity)}</td>
-            <td class="claim-name">${o.claimName || '—'}</td>
-            <td>${o.regionName || '—'}</td>
-            <td class="coords">${formatCoords(o)}</td>
-            <td>${mapUrl ? `<a href="${mapUrl}" target="_blank" class="map-btn">🗺</a>` : '—'}</td>
-          </tr>
-        `;
-      }).join('')}
+      ${filtered.map((o, i) => `
+        <tr class="order-row ${o.orderType}">
+          <td><span class="order-badge ${o.orderType}">${o.orderType === 'sell' ? '売り' : '買い'}</span></td>
+          <td class="price-cell">${formatPrice(o.priceThreshold)}</td>
+          <td>${formatNum(o.quantity)}</td>
+          <td class="claim-name">${o.claimName || '—'}</td>
+          <td>${o.regionName || '—'}</td>
+          <td class="coords">${formatCoords(o)}</td>
+        </tr>
+      `).join('')}
     </tbody>
   </table>`;
   
