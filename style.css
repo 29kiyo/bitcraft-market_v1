@@ -717,3 +717,78 @@ footer a:hover { color: var(--accent); }
 .rarity-epic { color: #c673e0; }
 .rarity-legendary { color: #f0a500; }
 .rarity-mythic { color: #ff4d6d; }
+.search-results {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.result-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.result-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.result-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(0,200,150,0.3);
+}
+
+.rc-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.rc-info {
+  flex: 1;
+}
+
+.rc-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e0e0e0;
+}
+
+.rc-sub {
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.rc-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #aaa;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-bottom: 16px;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  border-color: #00c896;
+  color: #00c896;
+}
