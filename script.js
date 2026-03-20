@@ -69,7 +69,6 @@ orderTypeFilter.addEventListener('change', applyFilters);
 // ============================================
 async function onSearchInput() {
   console.log('onSearchInput called:', searchInput.value);
-async function onSearchInput() {
   const q = searchInput.value.trim();
   if (q.length < 2) { hideSuggestions(); return; }
   clearTimeout(debounceTimer);
