@@ -1042,7 +1042,7 @@ footer a:hover { color: var(--accent); }
 }
 
 .region-order-filter {
-  background: rgba(255,255,255,0.05);
+  background: #1a2535;
   border: 1px solid rgba(255,255,255,0.15);
   color: #e0e0e0;
   padding: 6px 10px;
@@ -1050,4 +1050,9 @@ footer a:hover { color: var(--accent); }
   font-size: 13px;
   cursor: pointer;
   margin-left: auto;
+}
+
+.region-order-filter option {
+  background: #1a2535;
+  color: #e0e0e0;
 }
