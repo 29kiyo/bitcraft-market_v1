@@ -282,6 +282,13 @@ function renderSearchResults(items, page = 1) {
   emptyState.classList.add('hidden');
 }
 
+window.selectItem = async function(itemId) {
+  const item = currentItems.find(i => i.id === itemId);
+  if (!item) return;
+  searchResults.classList.add('hidden');
+  await loadItemDetail(item);
+};
+
 window.changePage = function(page) {
   currentPage = page;
   renderSearchResults(currentItems, currentPage);
