@@ -320,3 +320,5 @@ function getJaName(enName) {
   return null;
 }
 
+ return null;
+}
