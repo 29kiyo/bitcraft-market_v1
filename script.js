@@ -113,6 +113,10 @@ function showSuggestions(items) {
   suggestions.classList.remove('hidden');
 }
 
+function hideSuggestions() {
+  suggestions.classList.add('hidden');
+}
+
 // ============================================
 // メイン検索
 // ============================================
