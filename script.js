@@ -223,11 +223,7 @@ async function doSearch() {
       return;
     }
 
-    if (currentItems.length === 1) {
-      await loadItemDetail(currentItems[0]);
-      return;
-    }
-
+  
     currentPage = 1;
     renderSearchResults(currentItems, currentPage);
 
