@@ -419,7 +419,7 @@ function renderMap(orders, orderType) {
   // BitCraft Mapへのリンク（代表座標）
   const centerX = Math.round((minX + maxX) / 2);
   const centerZ = Math.round((minZ + maxZ) / 2);
-  const mapLink = `https://map.bitcraft.gg/?x=${centerX}&z=${centerZ}&zoom=4`;
+  const mapLink = `https://map.bitjita.com/?x=${centerX}&y=${centerZ}&zoom=4`;
 
   mapContainer.innerHTML = `
     <div class="map-inner">
@@ -460,7 +460,7 @@ window.showMarkerInfo = function(idx) {
   if (!marker) return;
 
   const info = document.getElementById('markerInfo');
-  const mapLink = `https://map.bitcraft.gg/?x=${Math.round(marker.x)}&z=${Math.round(marker.z)}&zoom=6`;
+  const mapLink = `https://map.bitjita.com/?x=${Math.round(marker.x)}&y=${Math.round(marker.z)}&zoom=6`;
 
   info.innerHTML = `
     <div class="mi-header">
