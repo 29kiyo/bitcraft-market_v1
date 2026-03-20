@@ -124,18 +124,7 @@ async function doSearch() {
   try {
     const enQuery = translateQuery(q).toLowerCase();
     const tier = tierFilter.value;
-    const rarity = rarityFilter.value; // 追加
-
-let filtered = allItems.filter(item =>
-  item.name.toLowerCase().includes(enQuery)
-);
-
-if (tier) {
-  filtered = filtered.filter(item => String(item.tier) === String(tier));
-}
-if (rarity !== '') {  // 追加
-  filtered = filtered.filter(item => String(item.rarity) === String(rarity));
-}
+    const rarity = rarityFilter.value;
 
     const allItems = await fetchAllMarketItems();
 
@@ -145,6 +134,9 @@ if (rarity !== '') {  // 追加
 
     if (tier) {
       filtered = filtered.filter(item => String(item.tier) === String(tier));
+    }
+    if (rarity !== '') {
+      filtered = filtered.filter(item => String(item.rarity) === String(rarity));
     }
 
     currentItems = filtered.slice(0, 50);
