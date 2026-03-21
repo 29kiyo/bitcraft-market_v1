@@ -396,13 +396,15 @@ main {
 
 /* ---- 注文一覧 ---- */
 .orders-list {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 20px 24px;
-   min-width: 0;
-  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 800px;
+  overflow-x: hidden;
 }
+
+.orders-list::-webkit-scrollbar {
+  display: none;
+}
+
 .order-count {
   font-size: 0.8rem;
   color: var(--text2);
