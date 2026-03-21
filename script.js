@@ -700,7 +700,6 @@ const regionOptions = regions.map(r => {
       </select>
       <input type="text" id="claimSearchInput" class="claim-search" placeholder="領地名検索..." oninput="changeOrderClaim(this.value)">
     </div>
-    ${pagination}
   </div>
   ${html}
   ${pagination}
