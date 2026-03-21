@@ -1365,3 +1365,19 @@ footer a:hover { color: var(--accent); }
   padding-left: 24px;
   color: var(--text2);
 }
+
+.clear-filter-btn {
+  background: rgba(255,77,109,0.1);
+  border: 1px solid rgba(255,77,109,0.3);
+  color: var(--danger);
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.clear-filter-btn:hover {
+  background: rgba(255,77,109,0.2);
+}
