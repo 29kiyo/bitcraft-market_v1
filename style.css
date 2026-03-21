@@ -1190,7 +1190,7 @@ footer a:hover { color: var(--accent); }
 
 .orders-table-header {
   position: sticky;
-  top: 0;
+  top: 233px;
   z-index: 5;
   background: #0d1520;
 }
