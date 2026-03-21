@@ -42,9 +42,19 @@ let currentOrderSort = 'asc';
 let currentOrderRegion = '';
 let currentOrderClaim = '';
 
+let claimDebounceTimer = null;
 window.changeOrderClaim = function(claim) {
-  currentOrderClaim = claim;
-  renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, currentOrderRegion, claim);
+  clearTimeout(claimDebounceTimer);
+  claimDebounceTimer = setTimeout(() => {
+    currentOrderClaim = claim;
+    renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, currentOrderRegion, claim);
+    // 入力値を復元
+    const input = document.getElementById('claimSearchInput');
+    if (input) {
+      input.value = claim;
+      input.focus();
+    }
+  }, 500);
 };
 
 window.changeOrderPage = function(page) {
