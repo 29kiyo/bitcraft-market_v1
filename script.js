@@ -668,38 +668,40 @@ const regionOptions = regions.map(r => {
     </div>
   ` : '';
 
-  const html = filtered.length === 0
+ const html = filtered.length === 0
   ? '<p class="no-orders">注文が見つかりませんでした</p>'
   : `
     ${pagination}
-    <table class="orders-table">
-      <thead>
-        <tr>
-          <th>種別</th>
-          <th>
-            価格
-            <button class="sort-btn ${sort === 'asc' ? 'active' : ''}" onclick="changeOrderSort('asc')">↑</button>
-            <button class="sort-btn ${sort === 'desc' ? 'active' : ''}" onclick="changeOrderSort('desc')">↓</button>
-          </th>
-          <th>数量</th>
-          <th>領地名</th>
-          <th>リージョン</th>
-          <th>座標</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${pageOrders.map((o) => `
-          <tr class="order-row ${o.orderType}">
-            <td><span class="order-badge ${o.orderType}">${o.orderType === 'sell' ? '売り' : '買い'}</span></td>
-            <td class="price-cell">${formatPrice(o.priceThreshold)}</td>
-            <td>${formatNum(o.quantity)}</td>
-            <td class="claim-name">${o.claimName || '—'}</td>
-            <td>${o.regionName ? `${o.regionName} (R${o.regionId})` : '—'}</td>
-            <td class="coords">${formatCoords(o)}</td>
+    <div class="orders-table-wrap">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>種別</th>
+            <th>
+              価格
+              <button class="sort-btn ${sort === 'asc' ? 'active' : ''}" onclick="changeOrderSort('asc')">↑</button>
+              <button class="sort-btn ${sort === 'desc' ? 'active' : ''}" onclick="changeOrderSort('desc')">↓</button>
+            </th>
+            <th>数量</th>
+            <th>領地名</th>
+            <th>リージョン</th>
+            <th>座標</th>
           </tr>
-        `).join('')}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          ${pageOrders.map((o) => `
+            <tr class="order-row ${o.orderType}">
+              <td><span class="order-badge ${o.orderType}">${o.orderType === 'sell' ? '売り' : '買い'}</span></td>
+              <td class="price-cell">${formatPrice(o.priceThreshold)}</td>
+              <td>${formatNum(o.quantity)}</td>
+              <td class="claim-name">${o.claimName || '—'}</td>
+              <td>${o.regionName ? `${o.regionName} (R${o.regionId})` : '—'}</td>
+              <td class="coords">${formatCoords(o)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
     ${pagination}
   `;
 
