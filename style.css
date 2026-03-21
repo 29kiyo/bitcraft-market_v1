@@ -42,12 +42,7 @@ body {
 
 /* ---- 背景エフェクト ---- */
 .bg-grid {
-  position: fixed; inset: 0; z-index: 0;
-  background-image:
-    linear-gradient(rgba(0,200,150,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,200,150,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
+  display: none;
 }
 .bg-glow {
   position: fixed; inset: 0; z-index: 0;
