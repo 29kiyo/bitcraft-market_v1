@@ -405,6 +405,15 @@ const ITEM_TRANSLATIONS = {
   "水": "Water",
   "武器": "Weapon",
   "野生の種": "Wild Seeds",
+  "石英": "Gypsite",
+"粗いレンガスラブ": "Rough Brick Slab",
+"未焼成レンガ": "Unfired Rough Brick",
+"空のバケツ": "Empty Bucket",
+"水入りバケツ": "Water Bucket",
+"スティック": "Stick",
+"ヘキサイトカプセル": "Hexite Capsule",
+"焚き火キット": "Campfire Kit",
+"植物スポット": "Potted",
   
 };
 
