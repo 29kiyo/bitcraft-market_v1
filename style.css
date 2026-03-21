@@ -1051,3 +1051,40 @@ footer a:hover { color: var(--accent); }
   background: #1a2535;
   color: #e0e0e0;
 }
+
+@media (max-width: 768px) {
+  .chart-orders-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .order-type-tabs {
+    flex-wrap: wrap;
+  }
+
+  .region-order-filter {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 8px;
+  }
+
+  .price-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .filters {
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    flex: 1 1 45%;
+  }
+
+  .orders-table {
+    font-size: 12px;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 6px 4px;
+  }
+}
