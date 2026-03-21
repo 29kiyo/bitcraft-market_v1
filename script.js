@@ -258,6 +258,7 @@ async function doSearch() {
   }
 }
 function renderSearchResults(items, page = 1) {
+  hideSuggestions();
   const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
   const start = (page - 1) * ITEMS_PER_PAGE;
   const end = start + ITEMS_PER_PAGE;
@@ -369,9 +370,9 @@ async function loadItemDetail(item) {
 function applyFilters() {
   const tier = tierFilter.value;
   const rarity = rarityFilter.value;
+  const category = categoryFilter.value;
   const q = searchInput.value.trim();
-
-  if (q || tier || rarity !== '') {
+  if (q || tier || rarity !== '' || category) {
     doSearch();
   }
 }
