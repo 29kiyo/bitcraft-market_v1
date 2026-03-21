@@ -270,7 +270,21 @@ async function doSearch() {
 
     if (tier) filtered = filtered.filter(item => String(item.tier) === String(tier));
     if (rarity !== '') filtered = filtered.filter(item => String(item.rarity) === String(rarity));
-    if (category) filtered = filtered.filter(item => item.tag === category);
+    if (category) {
+  if (category.startsWith('__group__')) {
+    const groupName = category.replace('__group__', '');
+    const select = document.getElementById('categoryFilter');
+    const optgroup = [...select.querySelectorAll('optgroup')].find(g => g.label.includes(groupName));
+    if (optgroup) {
+      const tags = [...optgroup.querySelectorAll('option')]
+        .map(o => o.value)
+        .filter(v => !v.startsWith('__group__'));
+      filtered = filtered.filter(item => tags.includes(item.tag));
+    }
+  } else {
+    filtered = filtered.filter(item => item.tag === category);
+  }
+}
 
     currentItems = filtered;
 
