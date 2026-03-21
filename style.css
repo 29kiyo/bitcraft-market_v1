@@ -969,8 +969,10 @@ footer a:hover { color: var(--accent); }
 
 .order-type-tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 12px;
+  align-items: center;
 }
 
 .tab-btn {
@@ -1173,8 +1175,9 @@ footer a:hover { color: var(--accent); }
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 13px;
-  width: 150px;
+  width: 120px;
   outline: none;
+  flex-shrink: 0;
 }
 
 .claim-search::placeholder {
