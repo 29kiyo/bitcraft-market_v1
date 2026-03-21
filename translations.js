@@ -414,6 +414,16 @@ const ITEM_TRANSLATIONS = {
 "ヘキサイトカプセル": "Hexite Capsule",
 "焚き火キット": "Campfire Kit",
 "植物スポット": "Potted",
+  "オートマタハート": "Automata Heart",
+"充電済みオートマタハート": "Charged Automata's Heart",
+"消耗したオートマタハート": "Depleted Automata's Heart",
+"ボロボロのオートマタハート配線": "Tattered Automata's Heart Wiring",
+"ダイヤモンドリング": "Diamond Ring",
+"エメラルドリング": "Emerald Ring",
+"ルビーリング": "Ruby Ring",
+"サファイアリング": "Sapphire Ring",
+"宝石散りばめたリング": "Gem Encrusted Ring",
+"アルジェントリング": "Argent Ring",
   
 };
 
