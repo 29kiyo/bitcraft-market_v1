@@ -1228,3 +1228,16 @@ footer a:hover { color: var(--accent); }
   background: rgba(255,255,255,0.2);
   border-radius: 3px;
 }
+
+.orders-table-wrap::-webkit-scrollbar {
+  width: 6px;
+}
+
+.orders-table-wrap::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.05);
+}
+
+.orders-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
+}
