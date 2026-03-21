@@ -396,8 +396,6 @@ main {
 
 /* ---- 注文一覧 ---- */
 .orders-list {
-  overflow-y: auto;
-  max-height: 800px;
   overflow-x: hidden;
 }
 
@@ -1158,15 +1156,7 @@ footer a:hover { color: var(--accent); }
   background: rgba(255,255,255,0.03);
 }
 
-.orders-list-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: #0d1520;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  margin-bottom: 8px;
-}
+
 
 .claim-search {
   background: #1a2535;
@@ -1217,9 +1207,3 @@ footer a:hover { color: var(--accent); }
 .orders-table-body td:nth-child(6) { width: 120px; }
 
 
-.orders-thead th {
-  position: sticky;
-  top: 233px;
-  z-index: 5;
-  background: #0d1520;
-}
