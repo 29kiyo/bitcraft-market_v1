@@ -992,10 +992,13 @@ window.clearAllFilters = function() {
   
   // 注文種別
   document.getElementById('orderTypeFilter').value = '';
-  
-  // 検索ワードもある場合は再検索
-  const q = searchInput.value.trim();
-  if (q) doSearch();
+
+  // 検索結果クリア
+  searchInput.value = '';
+  searchResults.classList.add('hidden');
+  resultSection.classList.add('hidden');
+  emptyState.classList.remove('hidden');
+  currentItems = [];
 };
 
 window.filterTradeLog = function() {
