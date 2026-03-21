@@ -396,7 +396,17 @@ main {
 
 /* ---- 注文一覧 ---- */
 .orders-list {
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.orders-table-wrap {
+  overflow-y: auto;
+  max-height: 500px;
+}
+
+.orders-table-wrap::-webkit-scrollbar {
+  display: none;
 }
 
 .orders-list::-webkit-scrollbar {
