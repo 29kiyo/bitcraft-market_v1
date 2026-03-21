@@ -717,7 +717,6 @@ document.getElementById('ordersList').innerHTML = `
     <div class="orders-search-bar">
       <input type="text" id="claimSearchInput" class="claim-search" placeholder="領地名検索..." oninput="changeOrderClaim(this.value)" value="${claimFilter}">
     </div>
-    ${pagination}
   </div>
   ${html}
 `;
