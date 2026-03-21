@@ -666,8 +666,9 @@ const regionOptions = regions.map(r => {
   ` : '';
 
   const html = filtered.length === 0
-    ? '<p class="no-orders">注文が見つかりませんでした</p>'
-    : `
+  ? '<p class="no-orders">注文が見つかりませんでした</p>'
+  : `
+    <div class="orders-table-header">
       <table class="orders-table">
         <thead><tr>
           <th>種別</th>
@@ -681,6 +682,10 @@ const regionOptions = regions.map(r => {
           <th>リージョン</th>
           <th>座標</th>
         </tr></thead>
+      </table>
+    </div>
+    <div class="orders-table-body">
+      <table class="orders-table">
         <tbody>
           ${pageOrders.map((o, i) => `
             <tr class="order-row ${o.orderType}">
@@ -694,8 +699,9 @@ const regionOptions = regions.map(r => {
           `).join('')}
         </tbody>
       </table>
-      ${pagination}
-    `;
+    </div>
+    ${pagination}
+  `;
 
 document.getElementById('ordersList').innerHTML = `
   <div class="orders-list-header">
