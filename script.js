@@ -274,13 +274,15 @@ async function doSearch() {
   if (category.startsWith('__group__')) {
     const groupName = category.replace('__group__', '');
     const select = document.getElementById('categoryFilter');
-    const optgroup = [...select.querySelectorAll('optgroup')].find(g => g.label.includes(groupName));
-    if (optgroup) {
-      const tags = [...optgroup.querySelectorAll('option')]
-        .map(o => o.value)
-        .filter(v => !v.startsWith('__group__'));
-      filtered = filtered.filter(item => tags.includes(item.tag));
+    // __group__の次のoptionから次の__group__までの値を取得
+    const options = [...select.querySelectorAll('option')];
+    const groupIdx = options.findIndex(o => o.value === category);
+    const tags = [];
+    for (let i = groupIdx + 1; i < options.length; i++) {
+      if (options[i].value.startsWith('__group__')) break;
+      tags.push(options[i].value);
     }
+    filtered = filtered.filter(item => tags.includes(item.tag));
   } else {
     filtered = filtered.filter(item => item.tag === category);
   }
