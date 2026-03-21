@@ -1284,3 +1284,84 @@ footer a:hover { color: var(--accent); }
 .price-region-filter select option {
   background: #1a2535;
 }
+
+.multi-select-wrap {
+  position: relative;
+}
+
+.multi-select-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius);
+  padding: 7px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  min-width: 120px;
+  transition: border-color 0.2s;
+}
+
+.multi-select-btn:hover {
+  border-color: var(--accent);
+}
+
+.ms-arrow {
+  font-size: 10px;
+  color: var(--text2);
+}
+
+.multi-select-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  z-index: 200;
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.ms-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.15s;
+}
+
+.ms-item:hover {
+  background: rgba(0,200,150,0.08);
+}
+
+.ms-item input[type=checkbox] {
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.ms-all {
+  border-bottom: 1px solid var(--border);
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.ms-group {
+  font-weight: 600;
+  color: var(--accent);
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+  padding-top: 8px;
+}
+
+.ms-child {
+  padding-left: 24px;
+  color: var(--text2);
+}
