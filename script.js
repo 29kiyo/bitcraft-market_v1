@@ -668,7 +668,6 @@ const regionOptions = regions.map(r => {
   const html = filtered.length === 0
     ? '<p class="no-orders">注文が見つかりませんでした</p>'
     : `
-      ${pagination}
       <table class="orders-table">
         <thead><tr>
           <th>種別</th>
@@ -710,9 +709,10 @@ document.getElementById('ordersList').innerHTML = `
         ${regionOptions}
       </select>
     </div>
-  </div>
-  <div class="orders-search-bar">
-    <input type="text" id="claimSearchInput" class="claim-search" placeholder="領地名検索..." oninput="changeOrderClaim(this.value)" value="${claimFilter}">
+    <div class="orders-search-bar">
+      <input type="text" id="claimSearchInput" class="claim-search" placeholder="領地名検索..." oninput="changeOrderClaim(this.value)" value="${claimFilter}">
+    </div>
+    ${pagination}
   </div>
   ${html}
 `;
