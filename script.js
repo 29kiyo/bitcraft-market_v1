@@ -563,11 +563,11 @@ function renderPriceChart(priceData, period = '7d') {
         maxRotation: 45,
         autoSkip: false  // ← 全ラベル表示
       },
-      grid: { color: 'rgba(255,255,255,0.05)' }
+      grid: { color: 'rgba(255,255,255,0.15)' }
     },
     y: {
       ticks: { color: '#aaa' },
-      grid: { color: 'rgba(255,255,255,0.05)' }
+      grid: { color: 'rgba(255,255,255,0.15)' }
     }
   }
 }
