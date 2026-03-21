@@ -246,6 +246,17 @@ const ITEM_TRANSLATIONS = {
   "アンブラ牙": "Umbura Fang",
   "結晶化したスライム": "Crystalized Slime",
 
+  // ===== 動物系 =====
+"サギ鳥": "Sagi Bird",
+"ヌビヤギ": "Nubi Goat",
+"スクロファ": "Scrofa",
+"エルダースクロファ": "Elder Scrofa",
+"セルバス": "Cervus",
+"メスセルバス": "Female Cervus",
+"プレーンズオックス": "Plains Ox",
+"ドロマイ": "Dromai",
+"動物": "Animal",
+
   // ===== 建築・クラフト素材 =====
   "ガラス": "Glass",
   "空のバケツ": "Empty Bucket",
