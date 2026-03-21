@@ -1231,3 +1231,20 @@ footer a:hover { color: var(--accent); }
   border-radius: 3px;
 }
 
+.refresh-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #aaa;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-bottom: 16px;
+  margin-left: 8px;
+  transition: all 0.2s;
+}
+
+.refresh-btn:hover {
+  border-color: #00c896;
+  color: #00c896;
+}
