@@ -782,6 +782,7 @@ function renderLogTable(trades, page) {
 
   document.getElementById('tradeLog').innerHTML = `
     <h3 class="section-title">📜 取引ログ <span class="order-count">${limited.length}件</span></h3>
+    <button class="refresh-btn" onclick="refreshTradeLog()">🔄 ログ更新</button>
     <div class="log-filter">
       <select id="logRegionFilter" onchange="filterTradeLog()">
   <option value="">全リージョン</option>
@@ -839,6 +840,17 @@ window.changeLogPage = function(page) {
   const trades = window._tradeLogs || [];
   const filtered = region ? trades.filter(t => t.regionName === region) : trades;
   renderLogTable(filtered, page);
+};
+
+window.refreshTradeLog = async function() {
+  const item = window._currentItem;
+  if (!item) return;
+  const res = await fetch(
+    `${API_BASE}/market/${item.itemOrCargo}/${item.id}/price-history?bucket=1+day&limit=7`,
+    { headers: HEADERS }
+  );
+  const priceData = res.ok ? await res.json() : null;
+  if (priceData) renderTradeLog(priceData);
 };
 
 window.filterTradeLog = function() {
