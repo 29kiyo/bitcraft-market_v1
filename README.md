@@ -41,7 +41,7 @@ https://29kiyo.github.io/bitcraft-market/
 ### Cloudflare Workers ソースコード
 CORSプロキシのソースコードは以下の通りです。
 
-\```javascript
+```javascript
 const BITJITA_BASE = 'https://bitjita.com/api';
 
 export default {
@@ -84,7 +84,7 @@ function corsHeaders() {
     'Access-Control-Allow-Headers': 'Content-Type, x-app-identifier',
   };
 }
-\```
+```
 
 ## 🤖 開発について
 このプロジェクトはClaude (Anthropic)を活用して開発しました。
