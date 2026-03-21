@@ -1266,3 +1266,21 @@ footer a:hover { color: var(--accent); }
 .sd-region-filter select option {
   background: #1a2535;
 }
+
+.price-region-filter {
+  margin-bottom: 12px;
+}
+
+.price-region-filter select {
+  background: #1a2535;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #e0e0e0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.price-region-filter select option {
+  background: #1a2535;
+}
