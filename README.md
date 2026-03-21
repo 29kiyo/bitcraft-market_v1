@@ -38,6 +38,54 @@ https://29kiyo.github.io/bitcraft-market/
 
 収集・保存する個人情報はありません。
 
+### Cloudflare Workers ソースコード
+CORSプロキシのソースコードは以下の通りです。
+
+\```javascript
+const BITJITA_BASE = 'https://bitjita.com/api';
+
+export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+
+    if (request.method === 'OPTIONS') {
+      return new Response(null, { headers: corsHeaders() });
+    }
+
+    const apiPath = url.pathname.replace(/^\/?api/, '');
+    const targetUrl = `${BITJITA_BASE}${apiPath}${url.search}`;
+
+    try {
+      const response = await fetch(targetUrl, {
+        headers: {
+          'User-Agent': 'bitcraft-market-search/1.0',
+          'x-app-identifier': 'bitcraft-market-search-github-pages',
+          'Accept': 'application/json',
+        },
+      });
+      const data = await response.text();
+      return new Response(data, {
+        status: response.status,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+      });
+    } catch (err) {
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+      });
+    }
+  },
+};
+
+function corsHeaders() {
+  return {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, x-app-identifier',
+  };
+}
+\```
+
 ## 🤖 開発について
 このプロジェクトはClaude (Anthropic)を活用して開発しました。
 
