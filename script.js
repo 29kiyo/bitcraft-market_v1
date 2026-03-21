@@ -34,6 +34,14 @@ backBtn.addEventListener('click', () => {
   setTimeout(() => window.scrollTo(0, savedScrollPosition), 0);
 });
 
+document.getElementById('refreshBtn').addEventListener('click', async () => {
+  const item = window._currentItem;
+  if (!item) return;
+  cachedMarketItems = null;
+  fetchPromise = null;
+  await loadItemDetail(item);
+});
+
 // 状態
 let currentItems = [];
 let currentPage = 1;
@@ -727,29 +735,50 @@ document.getElementById('ordersList').innerHTML = `
 `;
 }
 
+let currentLogPage = 1;
+const LOG_PER_PAGE = 20;
+const LOG_MAX_PAGES = 5;
+
 function renderTradeLog(priceData) {
   const trades = priceData?.recentTrades || [];
   if (trades.length === 0) {
     document.getElementById('tradeLog').innerHTML = '';
     return;
   }
+  window._tradeLogs = trades;
+  currentLogPage = 1;
+  renderLogTable(trades, currentLogPage);
+}
 
-  let currentRegion = '';
+function renderLogTable(trades, page) {
+  const maxItems = LOG_PER_PAGE * LOG_MAX_PAGES;
+  const limited = trades.slice(0, maxItems);
+  const totalPages = Math.ceil(limited.length / LOG_PER_PAGE);
+  const start = (page - 1) * LOG_PER_PAGE;
+  const pageItems = limited.slice(start, start + LOG_PER_PAGE);
+
+  const pagination = totalPages > 1 ? `
+    <div class="pagination">
+      <button class="page-btn" onclick="changeLogPage(${page - 1})" ${page <= 1 ? 'disabled' : ''}>← 前へ</button>
+      <span class="page-info">${page} / ${totalPages}</span>
+      <button class="page-btn" onclick="changeLogPage(${page + 1})" ${page >= totalPages ? 'disabled' : ''}>次へ →</button>
+    </div>
+  ` : '';
 
   document.getElementById('tradeLog').innerHTML = `
-    <h3 class="section-title">📜 取引ログ <span class="order-count">${trades.length}件</span></h3>
+    <h3 class="section-title">📜 取引ログ <span class="order-count">${limited.length}件</span></h3>
     <div class="log-filter">
-  <select id="logRegionFilter" onchange="filterTradeLog()">
-    <option value="">全リージョン</option>
-    ${[...new Set(trades.map(t => t.regionName).filter(Boolean))].sort().map(r => {
-      const rid = trades.find(t => t.regionName === r)?.regionId || '';
-      return `<option value="${r}">${r} (R${rid})</option>`;
-    }).join('')}
-  </select>
-  <input type="text" id="logClaimFilter" class="claim-search" placeholder="領地名検索..." oninput="filterTradeLog()">
-</div>
+      <select id="logRegionFilter" onchange="filterTradeLog()">
+        <option value="">全リージョン</option>
+        ${[...new Set(trades.map(t => t.regionName).filter(Boolean))].sort().map(r => {
+          const rid = trades.find(t => t.regionName === r)?.regionId || '';
+          return `<option value="${r}">${r} (R${rid})</option>`;
+        }).join('')}
+      </select>
+    </div>
+    ${pagination}
     <div class="log-table-wrap">
-      <table class="log-table" id="logTable">
+      <table class="log-table">
         <thead>
           <tr>
             <th>日時</th>
@@ -761,18 +790,17 @@ function renderTradeLog(priceData) {
             <th>合計</th>
           </tr>
         </thead>
-        <tbody id="logTableBody">
-          ${renderLogRows(trades)}
+        <tbody>
+          ${renderLogRows(pageItems)}
         </tbody>
       </table>
     </div>
+    ${pagination}
   `;
-
-  window._tradeLogs = trades;
 }
 
 function renderLogRows(trades) {
-  return trades.slice(0, 100).map(t => {
+  return trades.map(t => {
     const date = new Date(t.timestamp);
     const dateStr = `${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
     return `
@@ -789,6 +817,21 @@ function renderLogRows(trades) {
   }).join('');
 }
 
+window.changeLogPage = function(page) {
+  currentLogPage = page;
+  const region = document.getElementById('logRegionFilter')?.value || '';
+  const trades = window._tradeLogs || [];
+  const filtered = region ? trades.filter(t => t.regionName === region) : trades;
+  renderLogTable(filtered, page);
+};
+
+window.filterTradeLog = function() {
+  const region = document.getElementById('logRegionFilter')?.value || '';
+  const trades = window._tradeLogs || [];
+  const filtered = region ? trades.filter(t => t.regionName === region) : trades;
+  currentLogPage = 1;
+  renderLogTable(filtered, 1);
+};
 window.filterTradeLog = function() {
   const region = document.getElementById('logRegionFilter')?.value || '';
   const claim = document.getElementById('logClaimFilter')?.value || '';
