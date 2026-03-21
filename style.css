@@ -1187,3 +1187,19 @@ footer a:hover { color: var(--accent); }
 .orders-search-bar {
   padding: 8px 0;
 }
+
+.orders-table-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #0d1520;
+}
+
+.orders-table-body {
+  overflow-y: auto;
+  max-height: 500px;
+}
+
+.orders-table-body::-webkit-scrollbar {
+  display: none;
+}
