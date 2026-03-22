@@ -560,21 +560,31 @@ function renderPriceSummary(item, priceData) {
         <div class="pc-value" id="pcHighestBuy">${formatPrice(highestBuy)}</div>
         <div class="pc-sub">Highest Buy</div>
       </div>
+      <div class="price-card avg-sell">
+        <div class="pc-label">平均売値</div>
+        <div class="pc-value" id="pcAvgSell">—</div>
+        <div class="pc-sub">Avg Sell</div>
+      </div>
+      <div class="price-card avg-buy">
+        <div class="pc-label">平均買値</div>
+        <div class="pc-value" id="pcAvgBuy">—</div>
+        <div class="pc-sub">Avg Buy</div>
+      </div>
       <div class="price-card avg">
-  <div class="pc-label">24h平均</div>
-  <div class="pc-value" id="pcAvg24h">${formatPrice(avg24h)} ${changeHtml}</div>
-  <div class="pc-sub">24h Average</div>
-</div>
-<div class="price-card avg7">
-  <div class="pc-label">7日平均</div>
-  <div class="pc-value" id="pcAvg7d">${formatPrice(avg7d)}</div>
-  <div class="pc-sub">7-day Average</div>
-</div>
-<div class="price-card vol">
-  <div class="pc-label">24h取引量</div>
-  <div class="pc-value" id="pcVol">${formatNum(volume24h)}</div>
-  <div class="pc-sub">24h Volume</div>
-</div>
+        <div class="pc-label">24h平均</div>
+        <div class="pc-value" id="pcAvg24h">${formatPrice(avg24h)} ${changeHtml}</div>
+        <div class="pc-sub">24h Average</div>
+      </div>
+      <div class="price-card avg7">
+        <div class="pc-label">7日平均</div>
+        <div class="pc-value" id="pcAvg7d">${formatPrice(avg7d)}</div>
+        <div class="pc-sub">7-day Average</div>
+      </div>
+      <div class="price-card vol">
+        <div class="pc-label">24h取引量</div>
+        <div class="pc-value" id="pcVol">${formatNum(volume24h)}</div>
+        <div class="pc-sub">24h Volume</div>
+      </div>
     </div>
   `;
 }
@@ -599,9 +609,21 @@ window.updatePriceByRegion = function() {
   const pcAvg7d = document.getElementById('pcAvg7d');
   const pcVol = document.getElementById('pcVol');
 
+  const avgSell = sells.length > 0
+    ? Math.floor(sells.reduce((s, o) => s + Number(o.priceThreshold), 0) / sells.length)
+    : null;
+  const avgBuy = buys.length > 0
+    ? Math.floor(buys.reduce((s, o) => s + Number(o.priceThreshold), 0) / buys.length)
+    : null;
+
+  const pcAvgSell = document.getElementById('pcAvgSell');
+  const pcAvgBuy = document.getElementById('pcAvgBuy');
+
   if (pcLowestSell) pcLowestSell.innerHTML = formatPrice(lowestSell ?? '—');
   if (pcHighestBuy) pcHighestBuy.innerHTML = formatPrice(highestBuy ?? '—');
-  
+  if (pcAvgSell) pcAvgSell.innerHTML = formatPrice(avgSell ?? '—');
+  if (pcAvgBuy) pcAvgBuy.innerHTML = formatPrice(avgBuy ?? '—');
+
   if (region) {
     if (pcAvg24h) pcAvg24h.innerHTML = '—';
     if (pcAvg7d) pcAvg7d.innerHTML = '—';
@@ -1174,7 +1196,7 @@ function formatPrice(val) {
   if (val == null || val === '—') return '—';
   const n = Number(val);
   if (isNaN(n)) return '—';
-  return n.toLocaleString('ja-JP') + ' <span class="coin">🪙</span>';
+  return Math.floor(n).toLocaleString('ja-JP') + ' <span class="coin">🪙</span>';
 }
 
 function formatNum(val) {
