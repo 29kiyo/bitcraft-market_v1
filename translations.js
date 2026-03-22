@@ -14,7 +14,7 @@ const ITEM_TRANSLATIONS = {
   // ===== 金属・鉱石系 =====
   "フェラリス": "Ferralith",
   "フェラリス鉱石": "Ferralith Ore Chunk",
-  "フェラリスト精鉱": "Ferralith Ore Concentrate",
+  "フェラリス精鉱": "Ferralith Ore Concentrate",
   "フェラリスインゴット": "Ferralith Ingot",
   "フェラリス釘": "Ferralith Nails",
   "パイライト": "Pyrelite",
