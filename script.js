@@ -501,6 +501,7 @@ function renderResult(item, priceData, orders, orderType) {
 
   resultSection.classList.remove('hidden');
   emptyState.classList.add('hidden');
+  updatePriceByRegion();
 }
 
 function renderItemHeader(item) {
