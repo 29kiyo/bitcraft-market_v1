@@ -194,6 +194,9 @@ async function fetchSuggestions(q) {
     if (hasJapanese) {
       // 日本語の場合：マッチする全ての翻訳候補で検索
       const matchedEn = new Set();
+      // 読み仮名（ひらがな・カタカナ）検索も追加
+const yomiMatched = searchByYomi(q);
+yomiMatched.forEach(en => matchedEn.add(en));
       const sorted = Object.entries(ITEM_TRANSLATIONS).sort((a, b) => b[0].length - a[0].length);
       for (const [ja, en] of sorted) {
         if (ja.includes(q) || q.includes(ja)) {
@@ -285,6 +288,9 @@ if (!q && tiers.length === 0 && rarities.length === 0 && categories.length === 0
     if (q) {
       if (hasJapanese) {
         const matchedEn = new Set();
+        // 読み仮名（ひらがな・カタカナ）検索も追加
+const yomiMatched = searchByYomi(q);
+yomiMatched.forEach(en => matchedEn.add(en));
         const sorted = Object.entries(ITEM_TRANSLATIONS).sort((a, b) => b[0].length - a[0].length);
         for (const [ja, en] of sorted) {
           if (ja.includes(q) || q.includes(ja)) matchedEn.add(en.toLowerCase());
