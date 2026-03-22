@@ -277,7 +277,7 @@ main {
 }
 .price-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(7, 1fr);
   gap: 12px;
 }
 .price-card {
@@ -292,6 +292,8 @@ main {
 .price-card.buy { border-left: 3px solid var(--accent-buy); }
 .price-card.avg, .price-card.avg7 { border-left: 3px solid var(--accent-gold); }
 .price-card.vol { border-left: 3px solid var(--text3); }
+.price-card.avg-sell { border-left: 3px solid var(--accent-sell); }
+.price-card.avg-buy { border-left: 3px solid var(--accent-buy); }
 .pc-label {
   font-size: 0.72rem;
   color: var(--text2);
