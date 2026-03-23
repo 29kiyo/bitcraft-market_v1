@@ -109,6 +109,11 @@ function toggleDropdown(id) {
   dropdown.classList.toggle('hidden');
 }
 
+function toggleParentCategory(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+
 function updateMultiLabel(type) {
   const values = getCheckedValues(type);
   const label = document.getElementById(`${type}Label`);
