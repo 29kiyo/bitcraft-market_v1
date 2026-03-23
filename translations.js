@@ -1135,6 +1135,8 @@ const EN_EXACT = {
   "Araknir Eggsack": "アラクニル卵嚢",
   "Araknir Fangs": "アラクニル牙",
   "Araknir Silk": "アラクニルシルク",
+  "Pure Argent Ring": "ピュア・アージェントリング",
+  "Argent Ingot": "アージェントインゴット",
   "Dried Araknir Blood": "乾燥アラクニル血液",
   "Venomous Araknir Fangs": "毒アラクニル牙",
   "Ancient Draught": "古代の飲み物",
