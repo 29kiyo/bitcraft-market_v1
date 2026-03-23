@@ -595,10 +595,6 @@ main {
 
 /* ---- 空状態 ---- */
 .empty-state-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-  align-items: start;
   padding: 24px 0;
 }
 .arb-panel { min-width: 0; }
