@@ -1246,15 +1246,15 @@ window.loadArbitrage = async function() {
 
   try {
     const allItems = await fetchAllMarketItems();
-    const BATCH = 50;
+    const BATCH = 5;
+    const DELAY = 200; // ms
     const results = [];
     let processed = 0;
 
-    // 50件ずつ並列取得
     for (let i = 0; i < allItems.length; i += BATCH) {
       const batch = allItems.slice(i, i + BATCH);
       processed += batch.length;
-      list.innerHTML = `<p class="arb-empty">取得中... ${processed} / ${allItems.length} 件</p>`;
+      list.innerHTML = `<p class="arb-empty">取得中... ${processed} / ${allItems.length} 件（しばらくお待ちください）</p>`;
 
       const fetched = await Promise.all(batch.map(item => {
         const type = item.itemType === 1 ? 'cargo' : 'item';
@@ -1273,6 +1273,9 @@ window.loadArbitrage = async function() {
         const rate   = Math.floor((profit / sell) * 100);
         results.push({ item: allItems[i + j], sell: Math.floor(sell), buy: Math.floor(buy), profit, rate });
       }
+
+      // レート制限対策
+      await new Promise(r => setTimeout(r, DELAY));
     }
 
     results.sort((a, b) => b.profit - a.profit);
