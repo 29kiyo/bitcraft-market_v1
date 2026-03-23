@@ -361,6 +361,24 @@ if (categories.length > 0) {
 
     currentItems = filtered;
 
+    // 検索結果に含まれるタグのみカテゴリドロップダウンに表示
+    const resultTags = new Set(currentItems.map(i => i.tag).filter(Boolean));
+    document.querySelectorAll('#categoryDropdown .ms-item.ms-child').forEach(label => {
+      const val = label.querySelector('input')?.value;
+      const show = !val || resultTags.has(val);
+      label.style.display = show ? '' : 'none';
+    });
+    // グループも子が全て非表示なら隠す
+    document.querySelectorAll('#categoryDropdown .ms-item.ms-group').forEach(group => {
+      let next = group.nextElementSibling;
+      let hasVisible = false;
+      while (next && next.classList.contains('ms-child')) {
+        if (next.style.display !== 'none') hasVisible = true;
+        next = next.nextElementSibling;
+      }
+      group.style.display = hasVisible ? '' : 'none';
+    });
+
     if (currentItems.length === 0) {
       showError('アイテムが見つかりませんでした。別のキーワードで試してください。');
       return;
@@ -1058,6 +1076,10 @@ window.clearAllFilters = function() {
   resultSection.classList.add('hidden');
   emptyState.classList.remove('hidden');
   currentItems = [];
+  // カテゴリドロップダウンを全表示に戻す
+  document.querySelectorAll('#categoryDropdown .ms-item').forEach(label => {
+    label.style.display = '';
+  });
 };
 
 window.filterTradeLog = function() {
