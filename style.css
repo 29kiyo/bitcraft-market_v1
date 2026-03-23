@@ -1382,3 +1382,15 @@ footer a:hover { color: var(--accent); }
 .clear-filter-btn:hover {
   background: rgba(255,77,109,0.2);
 }
+
+.s-tag {
+  font-size: 10px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.08);
+  color: var(--text2);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
