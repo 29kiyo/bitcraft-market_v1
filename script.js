@@ -466,16 +466,6 @@ async function loadItemDetail(item) {
     // 現在のアイテムを保存（期間切り替え用）
     window._currentItem = enrichedItem;
 
-    // 転売チャンスキャッシュに蓄積
-    if (marketData?.stats?.lowestSell && marketData?.stats?.highestBuy) {
-      if (!window._arbCache) window._arbCache = {};
-      window._arbCache[item.id] = {
-        item: enrichedItem,
-        sell: Math.floor(Number(marketData.stats.lowestSell)),
-        buy:  Math.floor(Number(marketData.stats.highestBuy)),
-      };
-      updateArbitrageList();
-    }
 
     renderResult(enrichedItem, priceData, currentOrders, orderType);
   } catch (err) {
@@ -1247,55 +1237,5 @@ function showError(msg) {
 function clearError() {
   errorMsg.classList.add('hidden');
   errorMsg.textContent = '';
-}
-
-window.loadArbitrage = function() {
-  updateArbitrageList();
-};
-
-function updateArbitrageList() {
-  const list = document.getElementById('arbitrageList');
-  if (!list) return;
-
-  const cache = window._arbCache || {};
-  const results = Object.values(cache)
-    .filter(({ sell, buy }) => buy > sell)
-    .map(({ item, sell, buy }) => {
-      const profit = buy - sell;
-      const rate   = Math.floor((profit / sell) * 100);
-      return { item, sell, buy, profit, rate };
-    })
-    .sort((a, b) => b.profit - a.profit)
-    .slice(0, 50);
-
-  if (results.length === 0) {
-    list.innerHTML = '<p class="arb-empty">アイテム詳細を開くと自動で蓄積されます</p>';
-    return;
-  }
-
-  list.innerHTML = `
-    <div class="arb-header-row">
-      <span>アイテム</span>
-      <span style="text-align:right">最低売値</span>
-      <span style="text-align:right">最高買値</span>
-      <span style="text-align:right">利益</span>
-      <span style="text-align:right">利益率</span>
-    </div>
-    ${results.map(({ item, sell, buy, profit, rate }) => {
-      const ja = getJaName(item.name);
-      const nameHtml = ja
-        ? `<span class="arb-name">${ja}</span><span class="arb-sub">${item.name}</span>`
-        : `<span class="arb-name">${item.name}</span>`;
-      return `
-        <div class="arb-item" onclick="selectItem('${item.id}')">
-          <div>${nameHtml}</div>
-          <div class="arb-val">${sell.toLocaleString('ja-JP')} 🪙</div>
-          <div class="arb-val">${buy.toLocaleString('ja-JP')} 🪙</div>
-          <div class="arb-profit">+${profit.toLocaleString('ja-JP')} 🪙</div>
-          <div class="arb-rate">+${rate}%</div>
-        </div>
-      `;
-    }).join('')}
-  `;
 }
 
