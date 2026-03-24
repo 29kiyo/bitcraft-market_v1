@@ -114,6 +114,32 @@ function toggleParentCategory(el) {
   el.nextElementSibling.classList.toggle('open');
 }
 
+// 親カテゴリマッピングを生成する関数
+function buildParentCategoryMap() {
+  const map = {};
+  const sections = document.querySelectorAll('#categoryDropdown .ms-section');
+  sections.forEach(section => {
+    const parentEl = section.querySelector('.ms-parent');
+    if (!parentEl) return;
+    const parentText = parentEl.textContent.replace(/[^\w\u4e00-\u9faf\u3040-\u30ff]/g, '').trim();
+    const childInputs = section.querySelectorAll('.ms-child input[type="checkbox"]');
+    childInputs.forEach(input => {
+      const tag = input.value;
+      if (tag) map[tag] = parentText;
+    });
+  });
+  return map;
+}
+let parentCategoryMap = {};
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    parentCategoryMap = buildParentCategoryMap();
+  });
+} else {
+  parentCategoryMap = buildParentCategoryMap();
+}
+
+
 function updateMultiLabel(type) {
   const values = getCheckedValues(type);
   const label = document.getElementById(`${type}Label`);
@@ -263,8 +289,11 @@ div.innerHTML = `
   </div>
   ${item.tier && item.tier > 0 ? `<span class="s-tier">T${item.tier}</span>` : ''}
   <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}
-  ${item.tag ? `<span class="s-tag">${getJaName(item.tag) || item.tag}</span>` : ''}</span>
-`;
+  ${item.tag ? `
+  ${parentCategoryMap[item.tag] ? `<span class="s-parent-category">${getJaName(parentCategoryMap[item.tag]) || parentCategoryMap[item.tag]}</span>` : ''}
+  <span class="s-tag">${getJaName(item.tag) || item.tag}</span>
+` : ''}
+
     div.addEventListener('click', () => {
       searchInput.value = item.name;
       hideSuggestions();
