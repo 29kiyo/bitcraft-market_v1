@@ -331,8 +331,14 @@ async function doSearch() {
 const rarities = getCheckedValues('rarity');
 const categories = getCheckedValues('category');
 
-if (!q && tiers.length === 0 && rarities.length === 0 && categories.length === 0) return;
-
+// フィルター条件がない場合、全アイテムを表示
+  if (!q && tiers.length === 0 && rarities.length === 0 && categories.length === 0) {
+    const allItems = await fetchAllMarketItems();
+    currentItems = allItems;
+    renderSearchResults(currentItems, 1);
+    return;
+  }
+  
   hideSuggestions();
   showLoading();
   clearError();
@@ -545,13 +551,7 @@ async function loadItemDetail(item) {
 // フィルター適用
 // ============================================
 function applyFilters() {
-  const tiers = getCheckedValues('tier');
-  const rarities = getCheckedValues('rarity');
-  const categories = getCheckedValues('category');
-  const q = searchInput.value.trim();
-  if (q || tiers.length > 0 || rarities.length > 0 || categories.length > 0) {
     doSearch();
-  }
 }
 
 // ============================================
