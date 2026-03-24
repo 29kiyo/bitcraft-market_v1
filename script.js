@@ -331,7 +331,19 @@ async function doSearch() {
 const rarities = getCheckedValues('rarity');
 const categories = getCheckedValues('category');
 
-if (!q && tiers.length === 0 && rarities.length === 0 && categories.length === 0) return;
+// フィルター条件がない場合、検索されていない状態に戻る
+  const orderType = orderTypeFilter.value;
+  const isOrderTypeFilterEmpty = orderType === '';
+  const isCategoryFilterEmpty = categories.length === 0 || categories.every(cat => cat.startsWith('__group__'));
+  console.log('doSearch filters:', { q, tiers, rarities, categories, isCategoryFilterEmpty, orderType, isOrderTypeFilterEmpty });
+  if (!q && tiers.length === 0 && rarities.length === 0 && isOrderTypeFilterEmpty && isCategoryFilterEmpty) {
+    console.log('Early return: no filters');
+    currentItems = [];
+    searchResults.classList.add('hidden');
+    resultSection.classList.add('hidden');
+    emptyState.classList.remove('hidden');
+    return;
+  }
   
   hideSuggestions();
   showLoading();
