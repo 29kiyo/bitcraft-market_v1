@@ -366,22 +366,18 @@ if (categories.length > 0) {
 
     currentItems = filtered;
 
-    // 検索結果に含まれるタグのみカテゴリドロップダウンに表示
+   // 検索結果に含まれるタグのみカテゴリドロップダウンに表示
     const resultTags = new Set(currentItems.map(i => i.tag).filter(Boolean));
-    document.querySelectorAll('#categoryDropdown .ms-item.ms-child').forEach(label => {
-      const val = label.querySelector('input')?.value;
-      const show = !val || resultTags.has(val);
-      label.style.display = show ? '' : 'none';
-    });
-    // グループも子が全て非表示なら隠す
-    document.querySelectorAll('#categoryDropdown .ms-item.ms-group').forEach(group => {
-      let next = group.nextElementSibling;
+    document.querySelectorAll('#categoryDropdown .ms-section').forEach(section => {
       let hasVisible = false;
-      while (next && next.classList.contains('ms-child')) {
-        if (next.style.display !== 'none') hasVisible = true;
-        next = next.nextElementSibling;
-      }
-      group.style.display = hasVisible ? '' : 'none';
+      section.querySelectorAll('.ms-child').forEach(label => {
+        const val = label.querySelector('input')?.value;
+        const show = !val || resultTags.has(val);
+        label.style.display = show ? '' : 'none';
+        if (show) hasVisible = true;
+      });
+      // 子が全て非表示なら親ごと隠す
+      section.style.display = hasVisible ? '' : 'none';
     });
 
     if (currentItems.length === 0) {
