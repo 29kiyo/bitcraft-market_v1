@@ -215,7 +215,7 @@
             <label class="ms-item ms-child"><input type="checkbox" value="Citric Berry" onchange="updateMultiLabel('category')"> シトリックベリー</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Mushroom" onchange="updateMultiLabel('category')"> キノコ</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Rare Mushroom" onchange="updateMultiLabel('category')"> レアキノコ</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Vegetable" onchange="updateMultiLabel('category')"> 野菜</label>
+            <label class="ms-item ms-child"><input type="checkbox" value="Vegetable" onchange="updateMultiLabel('category')"> スターバルブ</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Grain" onchange="updateMultiLabel('category')"> 穀物</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Dough" onchange="updateMultiLabel('category')"> 生地</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Tea" onchange="updateMultiLabel('category')"> お茶</label>
@@ -251,9 +251,6 @@
             <label class="ms-item ms-group"><input type="checkbox" value="__group__ポーション・消耗品" onchange="updateMultiLabel('category')">ポーション・消耗品（全て）</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Healing Potion" onchange="updateMultiLabel('category')"> 回復ポーション</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Stamina Potion" onchange="updateMultiLabel('category')"> スタミナポーション</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Building Elixir" onchange="updateMultiLabel('category')"> 建築エリクサー</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Gathering Elixir" onchange="updateMultiLabel('category')"> 採集エリクサー</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Crafting Elixir" onchange="updateMultiLabel('category')"> クラフトエリクサー</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Elixir" onchange="updateMultiLabel('category')"> エリクサー</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Chemical Catalyst" onchange="updateMultiLabel('category')"> 化学触媒</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Catalyst" onchange="updateMultiLabel('category')"> 触媒</label>
@@ -264,7 +261,8 @@
             <label class="ms-item ms-child"><input type="checkbox" value="Firesand" onchange="updateMultiLabel('category')"> ファイアサンド</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Reforging Solvent" onchange="updateMultiLabel('category')"> 再鍛造溶剤</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Metal Solvent" onchange="updateMultiLabel('category')"> 金属溶剤</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Leather Treatment" onchange="updateMultiLabel('category')"> 革処理剤</label>
+            <label class="ms-item ms-child"><input type="checkbox" value="Leather solvent" onchange="updateMultiLabel('category')"> 革処理剤</label>
+            <label class="ms-item ms-child"><input type="checkbox" value="Wood Polish" onchange="updateMultiLabel('category')"> 木材磨き剤</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Potter's Mix" onchange="updateMultiLabel('category')"> 陶芸ミックス</label>
           </div>
         </div>
@@ -308,9 +306,6 @@
             <label class="ms-item ms-child"><input type="checkbox" value="Cloth Clothing" onchange="updateMultiLabel('category')"> 布装備</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Cosmetic Clothes" onchange="updateMultiLabel('category')"> コスメ服</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Jewelry" onchange="updateMultiLabel('category')"> ジュエリー</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Amulet" onchange="updateMultiLabel('category')"> アミュレット</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Ring" onchange="updateMultiLabel('category')"> リング</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Belt" onchange="updateMultiLabel('category')"> ベルト</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Dungeon Equipment" onchange="updateMultiLabel('category')"> ダンジョン装備</label>
           </div>
         </div>
@@ -343,19 +338,17 @@
           <div class="ms-parent" onclick="toggleParentCategory(this)">🏗️ 建築・クラフト <span class="ms-parent-arrow">▶</span></div>
           <div class="ms-section-body">
             <label class="ms-item ms-group"><input type="checkbox" value="__group__建築素材" onchange="updateMultiLabel('category')">建築・クラフト（全て）</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Construction Material" onchange="updateMultiLabel('category')"> 建設素材</label>
+            <label class="ms-item ms-child"><input type="checkbox" value="Construction Material" onchange="updateMultiLabel('category')"> 焚火キット</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Construction Blueprints" onchange="updateMultiLabel('category')"> 建設設計図</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Settlement Foundation Kit" onchange="updateMultiLabel('category')"> 拠点設立キット</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Rope" onchange="updateMultiLabel('category')"> ロープ</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Crushed Shells" onchange="updateMultiLabel('category')"> 砕いた殻</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Water" onchange="updateMultiLabel('category')"> 水</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Empty Bucket" onchange="updateMultiLabel('category')"> 空のバケツ</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Water Bucket" onchange="updateMultiLabel('category')"> 水入りバケツ</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Stick" onchange="updateMultiLabel('category')"> スティック</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Nails" onchange="updateMultiLabel('category')"> 釘</label>
+            <label class="ms-item ms-child"><input type="checkbox" value="Nail" onchange="updateMultiLabel('category')"> 釘</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Frames" onchange="updateMultiLabel('category')"> フレーム</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Hexite Capsule" onchange="updateMultiLabel('category')"> ヘキサイトカプセル</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Campfire Kit" onchange="updateMultiLabel('category')"> 焚き火キット</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Potted" onchange="updateMultiLabel('category')"> 植物スポット</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Pitch" onchange="updateMultiLabel('category')"> ピッチ</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Flint" onchange="updateMultiLabel('category')"> フリント</label>
@@ -369,8 +362,7 @@
             <label class="ms-item ms-group"><input type="checkbox" value="__group__研究・知識" onchange="updateMultiLabel('category')">研究・知識（全て）</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Codex" onchange="updateMultiLabel('category')"> 手引書</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Study Journal" onchange="updateMultiLabel('category')"> 学習帳</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Stone Carvings" onchange="updateMultiLabel('category')"> 石刻み</label>
-            <label class="ms-item ms-child"><input type="checkbox" value="Stone Diagrams" onchange="updateMultiLabel('category')"> 石図</label>
+            <label class="ms-item ms-child"><input type="checkbox" value="Ancient Hieroglyphs" onchange="updateMultiLabel('category')"> 古代象形文字</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Outpost Research" onchange="updateMultiLabel('category')"> 前哨地研究</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Wood Research" onchange="updateMultiLabel('category')"> 木材研究</label>
             <label class="ms-item ms-child"><input type="checkbox" value="Metal Research" onchange="updateMultiLabel('category')"> 金属研究</label>
