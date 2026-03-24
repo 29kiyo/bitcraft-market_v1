@@ -256,6 +256,7 @@ const ITEM_TRANSLATIONS = {
 "プレーンズオックス": "Plains Ox",
 "ドロマイ": "Dromai",
 "動物": "Animal",
+"ウゴ" : "ugo"
 
   // ===== 建築・クラフト素材 =====
   "ガラス": "Glass",
@@ -315,6 +316,7 @@ const ITEM_TRANSLATIONS = {
   "コスメ服": "Cosmetic Clothes",
   "砕いた殻": "Crushed Shells",
   "証書": "Deed",
+  "配置可能な証書": "Deployable Deed",
   "生地": "Dough",
   "ダンジョン素材": "Dungeon Crafting Material",
   "ダンジョン装備": "Dungeon Equipment",
@@ -441,6 +443,7 @@ const ITEM_TRANSLATIONS = {
 "補給品": "Supplies",
 "商人ライセンス": "Trader License",
 "証書": "Deed",
+"配置可能な証書": "Deployable Deed",
 "内壁証書": "Interior Wall Deed",
 "顔料": "Pigment",
 "羊皮紙": "Parchment",
@@ -527,6 +530,7 @@ const ITEM_YOMI = {
   "根":       "ね",
   "動物":     "どうぶつ",
   "証書":     "しょうしょ",
+  "設置可能":  "せっちかのう"
   "補給品":   "ほきゅうひん",
   "令状":     "れいじょう",
   "拡張":     "かくちょう",
