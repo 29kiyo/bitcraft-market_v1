@@ -14,6 +14,40 @@ function getCachedIcon(iconAssetName) {
   return url;
 }
 
+// キャッシュ自動削除機能
+let cacheClearTimer = null;
+const CACHE_CLEAR_INTERVAL = 60 * 60 * 1000; // 1時間
+
+function clearCaches() {
+  // アイコンキャッシュをクリア
+  iconCache.clear();
+  // マーケットデータキャッシュをクリア
+  cachedMarketItems = null;
+  fetchPromise = null;
+  console.log('キャッシュをクリアしました');
+}
+
+function startCacheClearTimer() {
+  if (cacheClearTimer) clearTimeout(cacheClearTimer);
+  cacheClearTimer = setTimeout(() => {
+    clearCaches();
+    startCacheClearTimer(); // 再度タイマー開始
+  }, CACHE_CLEAR_INTERVAL);
+}
+
+// ページ読み込み時にタイマー開始
+startCacheClearTimer();
+
+// ページを閉じるときにキャッシュをクリア
+window.addEventListener('beforeunload', () => {
+  clearCaches();
+});
+
+// リロード時にもキャッシュをクリア（beforeunloadはリロード時にも発火するが念のため）
+window.addEventListener('pagehide', () => {
+  clearCaches();
+});
+
 
 const HEADERS = { 'x-app-identifier': 'bitcraft-market-search-github-pages' };
 
@@ -285,16 +319,21 @@ const useJaName = jaName && jaName.length > 2 && item.name.toLowerCase() !== jaN
 const parentCategory = parentCategoryMap[item.tag] || '';
 const jaParentCategory = getJaName(parentCategory) || parentCategory;
 
+const displayName = useJaName ? `${jaName} ${item.name}` : item.name;
 div.innerHTML = `
-  <img class="s-icon" src="${iconUrl}" alt="${item.name}" onerror="this.style.display='none'">
-  <div class="s-text">
-    <span class="s-name">${useJaName ? jaName : item.name}</span>
-    <span class="s-sub">${useJaName ? item.name : ''}</span>
+  <div class="s-top">
+    <img class="s-icon" src="${iconUrl}" alt="${item.name}" onerror="this.style.display='none'">
+    <div class="s-text">
+      <span class="s-name">${useJaName ? jaName : item.name}</span>
+      ${useJaName ? `<span class="s-sub">${item.name}</span>` : ''}
+    </div>
   </div>
-  ${item.tier && item.tier > 0 ? `<span class="s-tier">T${item.tier}</span>` : ''}
-  <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
-  ${parentCategory ? `<span class="s-parent-category">${jaParentCategory}</span>` : ''}
-  ${item.tag ? `<span class="s-tag">${getJaName(item.tag) || item.tag}</span>` : ''}
+  <div class="s-tags">
+    ${item.tier && item.tier > 0 ? `<span class="s-tier">T${item.tier}</span>` : ''}
+    <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
+    ${parentCategory ? `<span class="s-parent-category">${jaParentCategory}</span>` : ''}
+    ${item.tag ? `<span class="s-tag">${getJaName(item.tag) || item.tag}</span>` : ''}
+  </div>
 `;
 
     div.addEventListener('click', () => {
@@ -438,21 +477,23 @@ function renderSearchResults(items, page = 1) {
         const iconUrl = getCachedIcon(item.iconAssetName);
         const jaName = getJaName(item.name);
         const useJaName = jaName && jaName.length > 2;
+        const displayName = useJaName ? `${jaName} ${item.name}` : item.name;
         return `
           <div class="result-card" onclick="selectItem('${item.id}')">
-            <img class="rc-icon" src="${iconUrl}" alt="${item.name}" onerror="this.style.display='none'">
-            <div class="rc-info">
-              <div class="rc-name">${useJaName ? jaName : item.name}</div>
-              ${useJaName ? `<div class="rc-sub">${item.name}</div>` : ''}
+            <div class="rc-top">
+              <img class="rc-icon" src="${iconUrl}" alt="${item.name}" onerror="this.style.display='none'">
+              <div class="rc-info">
+                <div class="rc-name">${useJaName ? jaName : item.name}</div>
+                ${useJaName ? `<div class="rc-sub">${item.name}</div>` : ''}
+              </div>
             </div>
             <div class="rc-badges">
               ${item.tier && item.tier > 0 ? `<span class="badge tier">T${item.tier}</span>` : ''}
-         <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
-            ${item.tag ? `
-            ${parentCategoryMap[item.tag] ? `<span class="s-parent-category">${getJaName(parentCategoryMap[item.tag]) || parentCategoryMap[item.tag]}</span>` : ''}
-            <span class="s-tag">${getJaName(item.tag) || item.tag}</span>
-          ` : ''}
-          </span>
+              <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
+              ${item.tag ? `
+                ${parentCategoryMap[item.tag] ? `<span class="s-parent-category">${getJaName(parentCategoryMap[item.tag]) || parentCategoryMap[item.tag]}</span>` : ''}
+                <span class="s-tag">${getJaName(item.tag) || item.tag}</span>
+              ` : ''}
             </div>
           </div>
         `;
@@ -478,6 +519,7 @@ window.selectItem = async function(itemId) {
   savedScrollPosition = window.scrollY;
   searchResults.classList.add('hidden');
   await loadItemDetail(item);
+  window.scrollTo(0, 0);
 };
 
 window.changePage = function(page) {
@@ -572,6 +614,10 @@ function renderItemHeader(item) {
         <div class="item-badges">
           ${item.tier && item.tier > 0 ? `<span class="badge tier">Tier ${item.tier}</span>` : ''}
           <span class="s-rarity rarity-${item.rarityStr?.toLowerCase()}">${item.rarityStr || ''}</span>
+          ${item.tag ? `
+            ${parentCategoryMap[item.tag] ? `<span class="s-parent-category">${getJaName(parentCategoryMap[item.tag]) || parentCategoryMap[item.tag]}</span>` : ''}
+            <span class="s-tag">${getJaName(item.tag) || item.tag}</span>
+          ` : ''}
         </div>
       </div>
     </div>
