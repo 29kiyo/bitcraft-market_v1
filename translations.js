@@ -296,6 +296,7 @@ const ITEM_TRANSLATIONS = {
   "砂糖": "Sugar",
 
 // ===== 未登録タグ追加 =====
+  "パッケージ": "Package"
   "古代コンポーネント": "Ancient Component",
   "古代象形文字": "Ancient Hieroglyphs",
   "古代遺物": "Ancient Relic",
@@ -956,6 +957,7 @@ const EN_ITEM_BASE = {
   "Firesand": "ファイアサンド",
   "Fish Oil": "魚油",
   "Fish Oil Package": "魚油パック",
+  "Package":"パッケージ"
   "Flower": "花",
   "Flower Package": "花パック",
   "Food Waste": "食料廃棄物",
@@ -1136,6 +1138,7 @@ const EN_EQUIPMENT_BASES = new Set([
 
 const EN_EXACT = {
   "Energized Sentinel's Shortsword": "エナジャイズドセンチネルのショートソード",
+  "Package":"パッケージ"
   "Energized Sentinel's Spear & Shield": "エナジャイズドセンチネルの槍と盾",
   "Eye of the Sentinel": "センチネルの瞳",
   "Heart of the Sentinel": "センチネルのハート",
