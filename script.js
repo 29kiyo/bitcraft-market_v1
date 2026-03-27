@@ -23,8 +23,7 @@ function clearCaches() {
   iconCache.clear();
   // マーケットデータキャッシュをクリア
   cachedMarketItems = null;
-fetchPromise = null;
-window._itemCache = {};
+  fetchPromise = null;
   console.log('キャッシュをクリアしました');
 }
 
@@ -139,10 +138,6 @@ function getCheckedValues(type) {
     .map(cb => cb.value);
 }
 
-function getOrderTypeFilter() {
-  return orderTypeFilter?.value || '';
-}
-
 function toggleDropdown(id) {
   const dropdown = document.getElementById(id);
   dropdown.classList.toggle('hidden');
@@ -215,21 +210,23 @@ let debounceTimer = null;
 let cachedMarketItems = null;
 let fetchPromise = null;
 
-async function fetchAllMarketItems(orderTypeParam = '') {
-  const cacheKey = orderTypeParam || 'all';
-  if (!window._itemCache) window._itemCache = {};
-  if (window._itemCache[cacheKey]) return window._itemCache[cacheKey];
+async function fetchAllMarketItems() {
+  if (cachedMarketItems) return cachedMarketItems;
+  if (fetchPromise) return fetchPromise;
 
-  let params = 'hasOrders=true&limit=2000';
-  if (orderTypeParam === 'sell') params = 'hasSellOrders=true&limit=2000';
-  if (orderTypeParam === 'buy') params = 'hasBuyOrders=true&limit=2000';
+  fetchPromise = (async () => {
+    // offsetが効かない場合があるので固定で大きめに1回取得
+    const res = await fetch(
+      `${API_BASE}/market?hasOrders=true&limit=2000`,
+      { headers: HEADERS }
+    );
+    if (!res.ok) throw new Error('fetch failed');
+    const json = await res.json();
+    cachedMarketItems = json?.data?.items || [];
+    return cachedMarketItems;
+  })();
 
-  const res = await fetch(`${API_BASE}/market?${params}`, { headers: HEADERS });
-  if (!res.ok) throw new Error('fetch failed');
-  const json = await res.json();
-  const items = json?.data?.items || [];
-  window._itemCache[cacheKey] = items;
-  return items;
+  return fetchPromise;
 }
 
 // ============================================
@@ -244,12 +241,9 @@ document.addEventListener('click', e => {
   if (!e.target.closest('.search-box')) hideSuggestions();
 });
 
-orderTypeFilter.addEventListener('change', () => {
-  if (!resultSection.classList.contains('hidden')) {
-    renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, currentOrderRegion, currentOrderClaim);
-  } else {
-    doSearch();
-  }
+orderTypeFilter.addEventListener('change', applyFilters);
+searchInput.addEventListener('blur', () => {
+  setTimeout(() => hideSuggestions(), 200);
 });
 
 // ============================================
@@ -268,7 +262,7 @@ async function onSearchInput() {
 
 async function fetchSuggestions(q) {
   try {
-const allItems = await fetchAllMarketItems();
+    const allItems = await fetchAllMarketItems();
     const hasJapanese = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
     
     let filtered = [];
@@ -370,23 +364,21 @@ async function doSearch() {
     document.getElementById('rarityLabel').textContent = 'すべて';
     document.querySelectorAll('#categoryDropdown input[type=checkbox]').forEach(cb => cb.checked = false);
     document.getElementById('categoryLabel').textContent = 'すべて';
-    const otf = document.getElementById('orderTypeFilter');
-if (otf) otf.value = '';
+    document.getElementById('orderTypeFilter').value = '';
     window._lastSearchQuery = q;
   }
   const tiers = getCheckedValues('tier');
 const rarities = getCheckedValues('rarity');
 const categories = getCheckedValues('category');
 
-const orderTypeParam = getOrderTypeFilter();
-if (!q && tiers.length === 0 && rarities.length === 0 && categories.length === 0 && orderTypeParam === '') return;
+if (!q && tiers.length === 0 && rarities.length === 0 && categories.length === 0) return;
   
   hideSuggestions();
   showLoading();
   clearError();
 
   try {
-const allItems = await fetchAllMarketItems(orderTypeParam);
+    const allItems = await fetchAllMarketItems();
     const hasJapanese = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
 
     let filtered = allItems;
@@ -587,9 +579,8 @@ function applyFilters() {
   const tiers = getCheckedValues('tier');
   const rarities = getCheckedValues('rarity');
   const categories = getCheckedValues('category');
-  const orderTypeParam = getOrderTypeFilter();
   const q = searchInput.value.trim();
-  if (q || tiers.length > 0 || rarities.length > 0 || categories.length > 0 || orderTypeParam !== '') {
+  if (q || tiers.length > 0 || rarities.length > 0 || categories.length > 0) {
     doSearch();
   }
 }
@@ -1361,4 +1352,3 @@ function clearError() {
   errorMsg.classList.add('hidden');
   errorMsg.textContent = '';
 }
-
