@@ -248,18 +248,7 @@ orderTypeFilter.addEventListener('change', () => {
   if (!resultSection.classList.contains('hidden')) {
     renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, currentOrderRegion, currentOrderClaim);
   } else {
-    applyFilters();
-  }
-});
-searchInput.addEventListener('blur', () => {
-  setTimeout(() => hideSuggestions(), 200);
-});
-
-orderTypeFilter.addEventListener('change', () => {
-  if (!resultSection.classList.contains('hidden')) {
-    renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, currentOrderRegion, currentOrderClaim);
-  } else {
-    applyFilters();
+    doSearch();
   }
 });
 
@@ -279,7 +268,7 @@ async function onSearchInput() {
 
 async function fetchSuggestions(q) {
   try {
-const allItems = await fetchAllMarketItems(orderTypeParam);
+const allItems = await fetchAllMarketItems();
     const hasJapanese = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
     
     let filtered = [];
@@ -597,8 +586,9 @@ function applyFilters() {
   const tiers = getCheckedValues('tier');
   const rarities = getCheckedValues('rarity');
   const categories = getCheckedValues('category');
+  const orderTypeParam = getOrderTypeFilter();
   const q = searchInput.value.trim();
-  if (q || tiers.length > 0 || rarities.length > 0 || categories.length > 0) {
+  if (q || tiers.length > 0 || rarities.length > 0 || categories.length > 0 || orderTypeParam !== '') {
     doSearch();
   }
 }
