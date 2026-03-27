@@ -956,7 +956,6 @@ const EN_ITEM_BASE = {
   "Firesand": "ファイアサンド",
   "Fish Oil": "魚油",
   "Fish Oil Package": "魚油パック",
-  "Package":"パッケージ"
   "Flower": "花",
   "Flower Package": "花パック",
   "Food Waste": "食料廃棄物",
