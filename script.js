@@ -255,6 +255,14 @@ searchInput.addEventListener('blur', () => {
   setTimeout(() => hideSuggestions(), 200);
 });
 
+orderTypeFilter.addEventListener('change', () => {
+  if (!resultSection.classList.contains('hidden')) {
+    renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, currentOrderRegion, currentOrderClaim);
+  } else {
+    applyFilters();
+  }
+});
+
 // ============================================
 // 検索オートサジェスト
 // ============================================
@@ -271,7 +279,7 @@ async function onSearchInput() {
 
 async function fetchSuggestions(q) {
   try {
-    const allItems = await fetchAllMarketItems();
+const allItems = await fetchAllMarketItems(orderTypeParam);
     const hasJapanese = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
     
     let filtered = [];
