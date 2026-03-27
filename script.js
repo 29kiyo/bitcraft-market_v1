@@ -1140,7 +1140,8 @@ window.clearAllFilters = function() {
   document.getElementById('categoryLabel').textContent = 'すべて';
   
   // 注文種別
-  document.getElementById('orderTypeFilter').value = '';
+  const otf = document.getElementById('orderTypeFilter');
+if (otf) otf.value = '';
 
   // 検索結果クリア
   searchInput.value = '';
