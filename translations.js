@@ -296,7 +296,6 @@ const ITEM_TRANSLATIONS = {
   "砂糖": "Sugar",
 
 // ===== 未登録タグ追加 =====
-  "パッケージ": "Package",
   "古代コンポーネント": "Ancient Component",
   "古代象形文字": "Ancient Hieroglyphs",
   "古代遺物": "Ancient Relic",
