@@ -140,9 +140,7 @@ function getCheckedValues(type) {
 }
 
 function getOrderTypeFilter() {
-  const dropdown = document.getElementById('orderTypeDropdown');
-  if (!dropdown) return [];
-  return [...dropdown.querySelectorAll('input[type=checkbox]:checked')].map(cb => cb.value);
+  return orderTypeFilter?.value || '';
 }
 
 function toggleDropdown(id) {
@@ -246,7 +244,13 @@ document.addEventListener('click', e => {
   if (!e.target.closest('.search-box')) hideSuggestions();
 });
 
-orderTypeFilter.addEventListener('change', applyFilters);
+orderTypeFilter.addEventListener('change', () => {
+  if (!resultSection.classList.contains('hidden')) {
+    renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, currentOrderRegion, currentOrderClaim);
+  } else {
+    applyFilters();
+  }
+});
 searchInput.addEventListener('blur', () => {
   setTimeout(() => hideSuggestions(), 200);
 });
@@ -376,15 +380,14 @@ async function doSearch() {
 const rarities = getCheckedValues('rarity');
 const categories = getCheckedValues('category');
 
-const orderTypes = getOrderTypeFilter();
-if (!q && tiers.length === 0 && rarities.length === 0 && categories.length === 0 && orderTypes.length === 0) return;
+const orderTypeParam = getOrderTypeFilter();
+if (!q && tiers.length === 0 && rarities.length === 0 && categories.length === 0 && orderTypeParam === '') return;
   
   hideSuggestions();
   showLoading();
   clearError();
 
   try {
-const orderTypeParam = orderTypes.length === 1 ? orderTypes[0] : '';
 const allItems = await fetchAllMarketItems(orderTypeParam);
     const hasJapanese = /[\u3040-\u30ff\u4e00-\u9faf]/.test(q);
 
