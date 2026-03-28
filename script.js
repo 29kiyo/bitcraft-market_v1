@@ -58,7 +58,7 @@ const MAP_BASE = 'https://map.bitcraft.com';
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 const suggestions = document.getElementById('suggestions');
-const orderTypeFilter = document.getElementById('orderTypeFilter');
+const orderTypeFilter = null; // 削除済み
 const resultSection = document.getElementById('resultSection');
 const emptyState = document.getElementById('emptyState');
 const loading = document.getElementById('loading');
@@ -92,13 +92,14 @@ const ORDERS_PER_PAGE = 20;
 let currentOrderSort = 'asc';
 let currentOrderRegion = '';
 let currentOrderClaim = '';
+let currentOrderType = '';
 
 let claimDebounceTimer = null;
 window.changeOrderClaim = function(claim) {
   clearTimeout(claimDebounceTimer);
   claimDebounceTimer = setTimeout(() => {
     currentOrderClaim = claim;
-    renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, currentOrderRegion, claim);
+    renderOrders(currentOrders, currentOrderType, 1, currentOrderSort, currentOrderRegion, claim);
     const input = document.getElementById('claimSearchInput');
     if (input) {
       input.value = claim;
@@ -110,21 +111,21 @@ window.changeOrderClaim = function(claim) {
 };
 
 window.changeOrderPage = function(page) {
-  renderOrders(currentOrders, orderTypeFilter.value, page, currentOrderSort, currentOrderRegion, currentOrderClaim);
+  renderOrders(currentOrders, currentOrderType, page, currentOrderSort, currentOrderRegion, currentOrderClaim);
 };
 
 window.changeOrderSort = function(sort) {
-  renderOrders(currentOrders, orderTypeFilter.value, 1, sort, currentOrderRegion, currentOrderClaim);
+  renderOrders(currentOrders, currentOrderType, 1, sort, currentOrderRegion, currentOrderClaim);
 };
 
 window.changeOrderType = function(type) {
-  if (orderTypeFilter) orderTypeFilter.value = type;
+  currentOrderType = type;
   renderOrders(currentOrders, type, 1, currentOrderSort, currentOrderRegion, currentOrderClaim);
 };
 
 window.changeOrderRegion = function(region) {
   currentOrderRegion = region;
-  renderOrders(currentOrders, orderTypeFilter.value, 1, currentOrderSort, region, currentOrderClaim);
+  renderOrders(currentOrders, currentOrderType, 1, currentOrderSort, region, currentOrderClaim);
 };
 
 const ITEMS_PER_PAGE = 20;
@@ -241,7 +242,7 @@ document.addEventListener('click', e => {
   if (!e.target.closest('.search-box')) hideSuggestions();
 });
 
-if (orderTypeFilter) orderTypeFilter.addEventListener('change', applyFilters);
+// if (orderTypeFilter) orderTypeFilter.addEventListener('change', applyFilters); // 削除済み
 searchInput.addEventListener('blur', () => {
   setTimeout(() => hideSuggestions(), 200);
 });
@@ -364,8 +365,8 @@ async function doSearch() {
     document.getElementById('rarityLabel').textContent = 'すべて';
     document.querySelectorAll('#categoryDropdown input[type=checkbox]').forEach(cb => cb.checked = false);
     document.getElementById('categoryLabel').textContent = 'すべて';
-    const otf = document.getElementById('orderTypeFilter');
-if (otf) otf.value = '';
+// const otf = document.getElementById('orderTypeFilter');
+// if (otf) otf.value = ''; // 削除済み
     window._lastSearchQuery = q;
   }
   const tiers = getCheckedValues('tier');
@@ -534,7 +535,7 @@ window.changePage = function(page) {
 async function loadItemDetail(item) {
   showLoading();
   try {
-const orderType = orderTypeFilter?.value || '';
+const orderType = '';
     const itemOrCargo = item.itemType === 1 ? 'cargo' : 'item';
 
     const [marketRes, priceRes] = await Promise.all([
@@ -563,6 +564,8 @@ const orderType = orderTypeFilter?.value || '';
     // 現在のアイテムを保存（期間切り替え用）
     window._currentItem = enrichedItem;
 
+    // 注文種別フィルターをリセット
+    currentOrderType = '';
 
     renderResult(enrichedItem, priceData, currentOrders, orderType);
   } catch (err) {
@@ -917,10 +920,12 @@ window.updateSupplyDemand = function() {
 function renderOrders(orders, orderType, page = 1, sort = 'asc', regionFilter = '', claimFilter = '') {
   currentOrderPage = page;
   currentOrderSort = sort;
+  // orderTypeパラメータは無視し、currentOrderTypeを使用
+  const effectiveOrderType = currentOrderType;
 
   let filtered = orders;
-  if (orderType === 'sell') filtered = orders.filter(o => o.orderType === 'sell');
-  if (orderType === 'buy') filtered = orders.filter(o => o.orderType === 'buy');
+  if (effectiveOrderType === 'sell') filtered = orders.filter(o => o.orderType === 'sell');
+  if (effectiveOrderType === 'buy') filtered = orders.filter(o => o.orderType === 'buy');
   if (regionFilter) filtered = filtered.filter(o => o.regionName === regionFilter);
   if (claimFilter) filtered = filtered.filter(o => o.claimName?.toLowerCase().includes(claimFilter.toLowerCase()));
 
@@ -934,14 +939,14 @@ function renderOrders(orders, orderType, page = 1, sort = 'asc', regionFilter = 
   const start = (page - 1) * ORDERS_PER_PAGE;
   const pageOrders = filtered.slice(start, start + ORDERS_PER_PAGE);
 
-  const sellCount = orders.filter(o => o.orderType === 'sell').length;
+  const sellCount = filtered.filter(o => o.orderType === 'sell').length;
 const regions = [...new Set(orders.map(o => o.regionName).filter(Boolean))].sort();
 const regionOptions = regions.map(r => {
   const rid = orders.find(o => o.regionName === r)?.regionId || '';
   return `<option value="${r}" ${regionFilter === r ? 'selected' : ''}>${r} (R${rid})</option>`;
 }).join('');
   
-  const buyCount = orders.filter(o => o.orderType === 'buy').length;
+  const buyCount = filtered.filter(o => o.orderType === 'buy').length;
 
   const pagination = totalPages > 1 ? `
     <div class="pagination">
@@ -994,9 +999,9 @@ document.getElementById('ordersList').innerHTML = `
   <div class="orders-list-header">
     <h3 class="section-title">📋 注文一覧 <span class="order-count">${filtered.length}件</span></h3>
     <div class="order-type-tabs">
-      <button class="tab-btn ${orderType === '' ? 'active' : ''}" onclick="changeOrderType('')">売り＆買い (${orders.length})</button>
-      <button class="tab-btn ${orderType === 'sell' ? 'active' : ''}" onclick="changeOrderType('sell')">売り (${sellCount})</button>
-      <button class="tab-btn ${orderType === 'buy' ? 'active' : ''}" onclick="changeOrderType('buy')">買い (${buyCount})</button>
+      <button class="tab-btn ${effectiveOrderType === '' ? 'active' : ''}" onclick="changeOrderType('')">売り＆買い (${filtered.length})</button>
+      <button class="tab-btn ${effectiveOrderType === 'sell' ? 'active' : ''}" onclick="changeOrderType('sell')">売り (${sellCount})</button>
+      <button class="tab-btn ${effectiveOrderType === 'buy' ? 'active' : ''}" onclick="changeOrderType('buy')">買い (${buyCount})</button>
       <select class="region-order-filter" onchange="changeOrderRegion(this.value)">
         <option value="">全リージョン</option>
         ${regionOptions}
@@ -1139,9 +1144,7 @@ window.clearAllFilters = function() {
   document.querySelectorAll('#categoryDropdown input[type=checkbox]').forEach(cb => cb.checked = false);
   document.getElementById('categoryLabel').textContent = 'すべて';
   
-  // 注文種別
-  const otf = document.getElementById('orderTypeFilter');
-if (otf) otf.value = '';
+  // 注文種別 (削除済み)
 
   // 検索結果クリア
   searchInput.value = '';
@@ -1163,6 +1166,8 @@ if (otf) otf.value = '';
   document.querySelectorAll('#categoryDropdown .ms-section-body').forEach(body => {
     body.classList.remove('open');
   });
+  // 注文種別フィルターをリセット
+  currentOrderType = '';
 };
 
 window.filterTradeLog = function() {
