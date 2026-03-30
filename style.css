@@ -1816,3 +1816,12 @@ text-overflow: ellipsis;
 .calc-list-btn:hover {
   background: rgba(0,200,150,0.2);
 }
+
+#calcListModal input[type=number]::-webkit-inner-spin-button,
+#calcListModal input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#calcListModal input[type=number] {
+  -moz-appearance: textfield;
+}
