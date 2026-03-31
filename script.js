@@ -1004,7 +1004,7 @@ function updateCalcListCount() {
 }
 
 window.addToCalcList = function(order, itemName) {
-  const existing = window._calcList.find(i => i.itemName === itemName && i.claimName === order.claimName);
+  const existing = window._calcList.find(i => i.itemName === itemName && i.claimName === order.claimName && i.priceThreshold === order.priceThreshold);
   if (existing) {
     const toast = document.createElement('div');
     toast.textContent = `「${itemName}」はすでに同じ領地でリストに追加されています`;
