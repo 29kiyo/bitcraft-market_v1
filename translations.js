@@ -38,7 +38,7 @@ const ITEM_TRANSLATIONS = {
   "アウルマイトインゴット": "Aurumite Ingot",
   "セレスチウム":"Celestium",
   "セレスチウム鉱石":"Celestium ore chunk",
-  "セレスチウムインゴット":"Celestium ingot",
+  "セレスチウムインゴット":"Celestium Ingot",
   "銀のナゲット": "Argent Nugget",
   "鉱石パック":"ore chunk",
   "銀": "Argent",
@@ -971,6 +971,8 @@ const EN_ITEM_BASE = {
   "エレンヴァール鉱石": "Elenvar Ore Chunk",
   "エマリウム鉱石": "Emarium Ore Chunk",
   "ラシウム鉱石": "Rathium Ore Chunk",
+  "Celestium ore chunk":"セレスチウム鉱石",
+  "セレスチウム鉱石":"Celestium ore chunk",
 
   // ===== 素材・繊維 =====
   "Amber Resin": "琥珀樹脂",
@@ -1204,7 +1206,7 @@ const EN_EXACT = {
   "Araknir Silk": "アラクニルシルク",
   "Araknir": "アラクニル",
   "Pure Argent Ring": "ピュア・アージェントリング",
-  "Argent Ingot": "アージェントインゴット",
+  "Argent Ingot": "銀インゴット",
   "Argent Nugget": "銀のナゲット",
   "Dried Araknir Blood": "乾燥アラクニル血液",
   "Venomous Araknir Fangs": "毒アラクニル牙",
