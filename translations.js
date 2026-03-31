@@ -34,6 +34,7 @@ const ITEM_TRANSLATIONS = {
   "ラシウム鉱石": "Rathium Ore Chunk",
   "ラシウムインゴット": "Rathium Ingot",
   "アウルマイト": "Aurumite",
+  "アウルマイト鉱石":"Aurumite Ore Chunk",
   "アウルマイトインゴット": "Aurumite Ingot",
   "銀": "Argent",
   "銀鉱石": "Argent Ore",
@@ -470,6 +471,7 @@ const ITEM_TRANSLATIONS = {
   "テレポート": "Teleportation",
   "エナジー": " Energy",
   "フクロウ": "Owl"
+
   
 };
 
@@ -882,7 +884,7 @@ const EN_MATERIAL_PREFIX = {
   "Rathium": "ラシウム",
   "Aurumite": "アウルマイト",
   "Flint": "フリント",
-  "Argent": "アルジェント",
+  "Argent": "銀",
   "Auric": "オーリック",
   "Astralite": "アストラライト",
 };
@@ -1164,6 +1166,7 @@ const EN_EXACT = {
   "Araknir": "アラクニル",
   "Pure Argent Ring": "ピュア・アージェントリング",
   "Argent Ingot": "アージェントインゴット",
+  "Argent Nugget": "銀のナゲット",
   "Dried Araknir Blood": "乾燥アラクニル血液",
   "Venomous Araknir Fangs": "毒アラクニル牙",
   "Ancient Draught": "古代の飲み物",
@@ -1249,6 +1252,13 @@ const EN_EXACT = {
   "Midwinter Cabin Shelf": "ミッドウィンターキャビン棚",
   "Midwinter Cabin Tall Lantern": "ミッドウィンターキャビン高ランタン",
   "Midwinter Cabin Whimsical Rug": "ミッドウィンターキャビンファンシーラグ",
+  "Midwinter Cabin Bed": "ミッドウィンターキャビンベッド",
+  "Midwinter Cabin Couch": "ミッドウィンターキャビンソファー",
+  "Midwinter Cabin Counter": "ミッドウィンターキャビンカウンター",
+  "Midwinter Cabin Cozy Rug": "ミッドウィンターキャビン居心地の良いラグ",
+  "Midwinter Cabin Fireplace": "ミッドウィンターキャビン暖炉",
+  "Midwinter Cabin Patterned Rug": "ミッドウィンターキャビン柄入りラグ",
+  "Midwinter Cabin Rocking Chair": "ミッドウィンターキャビンロッキングチェア",
   "Titan Bed": "タイタンベッド",
   "Titan Bench": "タイタンベンチ",
   "Titan Chair": "タイタンチェア",
@@ -1428,6 +1438,7 @@ const EN_EXACT = {
   "Smith's Argent Ring": "スミスのアルジェントリング",
   "Talented Woodcraft Cargo Bin": "才能あるウッドクラフト荷物箱",
   "Talented Woodcraft Item Storage": "才能あるウッドクラフトアイテム収納",
+  "Talented Woodcraft Small Carpet": "才能あるウッドクラフト小型カーペット",
   "Tattered Net": "ボロボロの網",
   "Thick Line": "太い釣り糸",
   "Toughened Pine Bark": "硬化したマツ樹皮",
