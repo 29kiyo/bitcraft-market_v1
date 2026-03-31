@@ -1363,7 +1363,7 @@ const EN_EXACT = {
   "Deed: Araknir Pet": "証書：アラクニルペット",
   "Deed: Basic Walls (Red)": "証書：基本の壁（赤）",
   "Deed: Pet Chrono": "証書：ペット・クロノ",
-  "Deed: Nubi Goat (III)":"証書:ペット・ヌビヤギ(III),
+  "Deed: Nubi Goat (III)":"証書:ペット・ヌビヤギ(III)",
   "Deed: Pet Croaklin (Light Pink)": "証書：ペット・クロアクリン（薄ピンク）",
   "Deed: Pet Croaklin (Light Green)":"証書：ペット・クロアクリン（薄緑）",
   "Deed: Pet Croaklin ":"証書：ペット・クロアクリン",
