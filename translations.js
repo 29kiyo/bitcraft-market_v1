@@ -303,6 +303,7 @@ const ITEM_TRANSLATIONS = {
 
 // ===== 未登録タグ追加 =====
   "研究":"research",
+  "手袋":"Gloves",
   "布":"Cloth",
   "革":"Leather",
   "金属":"Metal",
