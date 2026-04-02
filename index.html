@@ -23,7 +23,6 @@
     <h1>BitCraft<span class="accent"> Market</span></h1>
     <p class="tagline">Powered by Bitjita API</p>
   </div>
-        <button class="craft-btn" onclick="openCraftModal()">⚒ クラフト計算</button>
 </div>
     </div>
   </header>
@@ -507,20 +506,6 @@
 
     <!-- エラー -->
     <div id="errorMsg" class="error-msg hidden"></div>
-    <div id="craftModal" class="craft-modal-overlay hidden">
-  <div class="craft-modal">
-    <div class="craft-modal-header">
-      <h2 class="craft-modal-title">⚒ クラフト計算機</h2>
-      <button class="craft-modal-close" onclick="closeCraftModal()">✕</button>
-    </div>
-    <div class="craft-search-wrap">
-      <input type="text" id="craftSearchInput" class="craft-search-input" placeholder="アイテム名を入力（日本語・英語）...">
-      <button class="craft-search-btn" onclick="doCraftSearch()">検索</button>
-    </div>
-    <div id="craftSuggestions" class="craft-suggestions hidden"></div>
-    <div id="craftResult" class="craft-result"></div>
-  </div>
-</div>
   </main>
 
   <footer>
