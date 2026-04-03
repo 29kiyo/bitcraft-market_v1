@@ -303,6 +303,7 @@ const ITEM_TRANSLATIONS = {
 
 // ===== 未登録タグ追加 =====
   "研究":"research",
+  "洗練":"Refined",
   "手袋":"Gloves",
   "布":"Cloth",
   "革":"Leather",
@@ -417,6 +418,7 @@ const ITEM_TRANSLATIONS = {
   "精製布": "Refined Cloth",
   "精製インゴット": "Refined Ingot",
   "精製革": "Refined Leather",
+  "洗練された丈夫な革":"Refined Sturdy Leather",
   "精製板材": "Refined Plank",
   "帆走戦利品": "Sailing Loot",
   "苗木": "Sapling",
@@ -1026,6 +1028,9 @@ const EN_ITEM_BASE = {
   "Hardened Shell Amulet": "硬化した殻アミュレット",
   "Ink": "インク",
   "Jakyl Fang Amulet": "ジャキル牙アミュレット",
+  "Refined Sturdy Leather":"洗練された丈夫な革",
+  "Refined":"洗練",
+  "Sturdy":"丈夫",
   "Leather": "革",
   "Leather Belt": "革ベルト",
   "Leather Boots": "革ブーツ",
